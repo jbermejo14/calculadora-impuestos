@@ -1,0 +1,54 @@
+{
+  "anio": 2026,
+  "norma": "Real Decreto Legislativo 6/2015, de 30 de octubre, por el que se aprueba el texto refundido de la Ley sobre Tráfico, Circulación de Vehículos a Motor y Seguridad Vial (Anexo de Tasas DGT)",
+  "fuente": "https://sede.dgt.gob.es/es/tasas/",
+  "fechaVerificacion": "2026-01-15",
+  "verificado": true,
+  "tasas": {
+    "transferenciaOrdinaria": {
+      "codigo": "1.5",
+      "concepto": "Cambio de titularidad de vehículos de motor (turismos, motocicletas, furgonetas, camiones)",
+      "importe": 55.70,
+      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.5",
+      "fuente": "https://sede.dgt.gob.es/es/tasas/",
+      "fechaVerificacion": "2026-01-15",
+      "verificado": true
+    },
+    "transferenciaCiclomotor": {
+      "codigo": "1.2",
+      "concepto": "Cambio de titularidad de ciclomotores",
+      "importe": 27.85,
+      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.2",
+      "fuente": "https://sede.dgt.gob.es/es/tasas/",
+      "fechaVerificacion": "2026-01-15",
+      "verificado": true
+    },
+    "matriculacionOrdinaria": {
+      "codigo": "1.1",
+      "concepto": "Matriculación ordinaria de vehículos a motor",
+      "importe": 99.77,
+      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.1",
+      "fuente": "https://sede.dgt.gob.es/es/tasas/",
+      "fechaVerificacion": "2026-01-15",
+      "verificado": true
+    },
+    "matriculacionCiclomotor": {
+      "codigo": "1.2",
+      "concepto": "Matriculación de ciclomotores",
+      "importe": 27.85,
+      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.2",
+      "fuente": "https://sede.dgt.gob.es/es/tasas/",
+      "fechaVerificacion": "2026-01-15",
+      "verificado": true
+    },
+    "informeVehiculo": {
+      "codigo": "4.1",
+      "concepto": "Informe de vehículo detallado (cargas, precintos, titularidad e ITV)",
+      "importe": 8.67,
+      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 4.1",
+      "fuente": "https://sede.dgt.gob.es/es/tasas/",
+      "fechaVerificacion": "2026-01-15",
+      "verificado": true
+    }
+  }
+}

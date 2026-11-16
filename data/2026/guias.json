@@ -1,0 +1,75 @@
+{
+  "anio": 2026,
+  "temas": {
+    "tramos-iedmt": {
+      "slug": "tramos-iedmt",
+      "titulo": "Tramos del Impuesto de Matriculación (IEDMT)",
+      "descripcion": "Guía completa de los tramos oficiales de emisiones de CO₂ (ciclo WLTP) y porcentajes del Modelo 576 de la AEAT para turismos, motos y campers.",
+      "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales, artículos 65 y 70",
+      "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
+      "fechaVerificacion": "2026-01-15",
+      "contenido": {
+        "resumen": "El Impuesto Especial sobre Determinados Medios de Transporte (IEDMT) grava la primera matriculación definitiva en España de vehículos a motor nuevos o usados de importación. Su importe se liquida telemáticamente a través del Modelo 576 de la Agencia Estatal de Administración Tributaria (AEAT).",
+        "tramosGeneral": [
+          { "epigrafe": "Epígrafe 1.º", "rango": "≤ 120 g/km CO₂", "tipo": "0,0 % (Exento)", "destacado": true },
+          { "epigrafe": "Epígrafe 2.º", "rango": "> 120 y < 160 g/km CO₂", "tipo": "4,75 %", "destacado": false },
+          { "epigrafe": "Epígrafe 3.º", "rango": "≥ 160 y < 200 g/km CO₂", "tipo": "9,75 %", "destacado": false },
+          { "epigrafe": "Epígrafe 4.º", "rango": "≥ 200 g/km CO₂", "tipo": "14,75 %", "destacado": true }
+        ],
+        "bonificaciones": [
+          { "titulo": "Familia Numerosa", "detalle": "50 % de reducción sobre la base imponible para vehículos entre 5 y 9 plazas." },
+          { "titulo": "Movilidad Reducida / Minusvalía", "detalle": "100 % de exención en la cuota para personas con discapacidad superior al 33 % o movilidad reducida." },
+          { "titulo": "Vehículos Comerciales e Industriales", "detalle": "No sujeción o exención cuando el vehículo está afecto de forma exclusiva al transporte de mercancías o actividad económica." }
+        ]
+      }
+    },
+    "depreciacion-boe": {
+      "slug": "depreciacion-boe",
+      "titulo": "Tabla de Depreciación por Antigüedad del BOE",
+      "descripcion": "Tabla oficial de porcentajes de depreciación anual del Ministerio de Hacienda para calcular el valor venal mínimo de vehículos usados.",
+      "norma": "Orden HAC/1484/2024, de 26 de diciembre, Anexo IV",
+      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
+      "fechaVerificacion": "2026-01-15",
+      "contenido": {
+        "resumen": "Para determinar la base imponible mínima del Impuesto sobre Transmisiones Patrimoniales (ITP), la Agencia Tributaria publica anualmente en el BOE los precios medios de venta y la tabla de coeficientes de depreciación según los años de utilización del coche.",
+        "reglaHacienda": "La base imponible a declarar en el Modelo 620 o 621 será la mayor entre el precio de compraventa pactado en contrato y el valor fiscal depreciado obtenido de las tablas del BOE."
+      }
+    },
+    "tasas-dgt": {
+      "slug": "tasas-dgt",
+      "titulo": "Tasas Oficiales de la DGT para Vehículos",
+      "descripcion": "Importes actualizados de las tasas de Tráfico para cambio de titularidad (Tasa 1.5), ciclomotores (Tasa 1.2), matriculación (Tasa 1.1) e informes de antecedentes.",
+      "norma": "Real Decreto Legislativo 6/2015, Texto Refundido de la Ley sobre Tráfico y Seguridad Vial (Anexo de Tasas)",
+      "fuente": "https://sede.dgt.gob.es/es/tasas/",
+      "fechaVerificacion": "2026-01-15",
+      "contenido": {
+        "resumen": "Las tasas de la Dirección General de Tráfico (DGT) son tributos estatales fijos e independientes del ITP autonómico que se abonan en la Sede Electrónica de la DGT o en la Jefatura Provincial de Tráfico.",
+        "tasas": [
+          { "codigo": "Tasa 1.5", "concepto": "Cambio de titularidad de vehículos a motor (turismos, motos, furgonetas)", "importe": "55,70 €" },
+          { "codigo": "Tasa 1.2", "concepto": "Transferencia de ciclomotores", "importe": "27,85 €" },
+          { "codigo": "Tasa 1.1", "concepto": "Matriculación ordinaria de vehículos", "importe": "99,77 €" },
+          { "codigo": "Tasa 4.1", "concepto": "Informe de vehículo (antecedentes, cargas y precintos)", "importe": "8,67 €" }
+        ]
+      }
+    },
+    "documentacion-tramitar": {
+      "slug": "documentacion-tramitar",
+      "titulo": "Documentación Necesaria para Cambiar de Nombre un Coche",
+      "descripcion": "Lista de documentos obligatorios que exige la DGT y la Administración Tributaria para realizar la transferencia de un vehículo entre particulares.",
+      "norma": "Reglamento General de Vehículos (Real Decreto 2822/1998, artículos 32 y 33)",
+      "fuente": "https://sede.dgt.gob.es/es/vehiculos/transferencias-de-vehiculos/",
+      "fechaVerificacion": "2026-01-15",
+      "contenido": {
+        "requisitos": [
+          "Contrato de compraventa original firmado por comprador y vendedor en todas sus hojas, indicando fecha, hora y datos completos.",
+          "Fotocopia del DNI / NIE en vigor del vendedor y DNI original del comprador.",
+          "Permiso de circulación original del vehículo.",
+          "Tarjeta de Inspección Técnica de Vehículos (ITV) con la inspección en vigor.",
+          "Justificante de pago o exención del Impuesto de Transmisiones Patrimoniales (Modelo 620 o 621 con Código Seguro de Verificación - CSV).",
+          "Justificante del pago del Impuesto sobre Vehículos de Tracción Mecánica (IVTM / impuesto de circulación municipal) del año anterior.",
+          "Justificante del abono de la tasa de cambio de titularidad de la DGT (Tasa 1.5 de 55,70 € o Tasa 1.2 de 27,85 €)."
+        ]
+      }
+    }
+  }
+}
