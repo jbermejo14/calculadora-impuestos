@@ -109,13 +109,13 @@ export default async function ComunidadPage({
       {/* Cabecera de la Comunidad */}
       <div className="mb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 text-orange-500 text-xs font-bold uppercase tracking-wider mb-2">
-          Ejercicio Fiscal 2026 Verificado
+          Ejercicio Fiscal 2026: pendiente de revisión
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           ITP de Vehículos Usados en {com.nombre} (2026)
         </h1>
         <p className="text-sm md:text-base text-slate-400">
-          Guía tributaria oficial, tipos impositivos aplicables, modelos de autoliquidación (<strong>{com.modelo}</strong>) y calculadora interactiva para la compraventa de coches de segunda mano entre particulares.
+          Guía tributaria, tipos impositivos aplicables, modelos de autoliquidación (<strong>{com.modelo}</strong>) y calculadora interactiva para la compraventa de coches de segunda mano entre particulares.
         </p>
       </div>
 
@@ -132,7 +132,7 @@ export default async function ComunidadPage({
         </div>
 
         <div className="card py-4 px-5">
-          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Modelo Oficial de Tributación</div>
+          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Modelo de Tributación</div>
           <div className="text-lg font-bold text-slate-200 mt-1">{com.modelo}</div>
           <div className="text-xs text-slate-500 mt-1">{com.organismo}</div>
         </div>
@@ -174,6 +174,7 @@ export default async function ComunidadPage({
         <div className="mt-4">
           <VerificationNotice
             anio={2026}
+            estadoVerificacion={com.estadoVerificacion}
             fechaVerificacion={com.fechaVerificacion}
             fuente={com.fuente}
             norma={com.norma}
@@ -185,7 +186,7 @@ export default async function ComunidadPage({
       <div className="card mb-8">
         <h2 className="text-lg font-bold mb-2">Ejemplos Reales de Transferencia en {com.nombre}</h2>
         <p className="text-sm text-slate-400 mb-6">
-          Cálculos con cifras reales aplicando el valor fiscal según la Orden Ministerial del BOE, los coeficientes de depreciación oficiales y las tasas de Tráfico:
+          Cálculos con cifras reales aplicando el valor fiscal según la Orden Ministerial del BOE, los coeficientes de depreciación y las tasas de Tráfico:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

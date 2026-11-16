@@ -1,3 +1,4 @@
+import type { EstadoVerificacion } from '@/lib/verification';
 import itp2026 from '../data/2026/itp.json';
 import depreciacion2026 from '../data/2026/depreciacion.json';
 import { getTasaTransferencia } from './fees';
@@ -10,16 +11,16 @@ export interface TramoDepreciacion {
   porcentaje: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
 }
 
 export interface DepreciacionData {
   anio: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   tramos: TramoDepreciacion[];
 }
 
@@ -50,8 +51,8 @@ export interface ComunidadITPData {
   organismo: string;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   notas: string;
 }
 
@@ -59,8 +60,8 @@ export interface ITPData {
   anio: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   comunidades: Record<string, ComunidadITPData>;
 }
 
@@ -89,7 +90,8 @@ export interface CalculoITPResultado {
     organismo: string;
     norma: string;
     fuente: string;
-    fechaVerificacion: string;
+    estadoVerificacion: EstadoVerificacion;
+    fechaVerificacion: string | null;
   };
   precioContrato: number;
   valorNuevoBoe: number;
@@ -114,7 +116,8 @@ export interface CalculoITPResultado {
   totalConCompra: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   avisoLegal: string;
 }
 
@@ -169,7 +172,7 @@ export function getComunidadesList(anio: number = 2026): ComunidadITPData[] {
 }
 
 /**
- * Obtiene el coeficiente de depreciación oficial según los años de antigüedad
+ * Obtiene el coeficiente de depreciación según los años de antigüedad
  * Cumple estrictamente con las fronteras del Anexo IV de la Orden Ministerial anual
  */
 export function getCoeficienteDepreciacion(anio: number = 2026, antiguedadAnios: number): TramoDepreciacion {
@@ -197,7 +200,7 @@ export function getCoeficienteDepreciacion(anio: number = 2026, antiguedadAnios:
 }
 
 /**
- * Calcula el valor fiscal mínimo oficial según tablas de Hacienda (BOE)
+ * Calcula el valor fiscal mínimo según tablas de Hacienda (BOE)
  */
 export function calcularValorFiscal(params: { anio?: number; valorNuevoBoe: number; antiguedadAnios: number }): {
   valorNuevoBoe: number;
@@ -261,6 +264,7 @@ export function calcularITP(params: CalculoITPParams): CalculoITPResultado {
         organismo: com.organismo,
         norma: com.norma,
         fuente: com.fuente,
+        estadoVerificacion: com.estadoVerificacion,
         fechaVerificacion: com.fechaVerificacion
       },
       precioContrato,
@@ -286,8 +290,9 @@ export function calcularITP(params: CalculoITPParams): CalculoITPResultado {
       totalConCompra: precioContrato + tasaDgtImporte + cuotaGestoria,
       norma: com.norma,
       fuente: com.fuente,
+      estadoVerificacion: com.estadoVerificacion,
       fechaVerificacion: com.fechaVerificacion,
-      avisoLegal: 'Cálculo orientativo con datos fiscales verificados. La liquidación oficial definitiva la realiza la administración tributaria autonómica correspondiente.'
+      avisoLegal: 'Cálculo orientativo con datos fiscales pendientes de revisión contra la fuente. La liquidación oficial definitiva la realiza la administración tributaria autonómica correspondiente.'
     };
   }
 
@@ -404,6 +409,7 @@ export function calcularITP(params: CalculoITPParams): CalculoITPResultado {
       organismo: com.organismo,
       norma: com.norma,
       fuente: com.fuente,
+      estadoVerificacion: com.estadoVerificacion,
       fechaVerificacion: com.fechaVerificacion
     },
     precioContrato: Number(precioContrato.toFixed(2)),
@@ -429,7 +435,8 @@ export function calcularITP(params: CalculoITPParams): CalculoITPResultado {
     totalConCompra: Number(totalConCompra.toFixed(2)),
     norma: com.norma,
     fuente: com.fuente,
+    estadoVerificacion: com.estadoVerificacion,
     fechaVerificacion: com.fechaVerificacion,
-    avisoLegal: 'Cálculo orientativo con datos fiscales verificados. La liquidación oficial definitiva la realiza la administración tributaria autonómica correspondiente.'
+    avisoLegal: 'Cálculo orientativo con datos fiscales pendientes de revisión contra la fuente. La liquidación oficial definitiva la realiza la administración tributaria autonómica correspondiente.'
   };
 }

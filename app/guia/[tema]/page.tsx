@@ -103,7 +103,7 @@ export default async function GuiaTemaPage({
                 <thead>
                   <tr>
                     <th>Epígrafe</th>
-                    <th>Emisiones oficiales de CO₂</th>
+                    <th>Emisiones de CO₂</th>
                     <th>Tipo Impositivo</th>
                   </tr>
                 </thead>
@@ -119,7 +119,7 @@ export default async function GuiaTemaPage({
               </table>
             </div>
 
-            <h3 className="text-base font-bold mb-2">Bonificaciones y Exenciones Oficiales</h3>
+            <h3 className="text-base font-bold mb-2">Bonificaciones y Exenciones</h3>
             <ul className="guide-list mb-6">
               {guia.contenido.bonificaciones.map((b: any) => (
                 <li key={b.titulo}>
@@ -172,14 +172,14 @@ export default async function GuiaTemaPage({
 
         {slug === 'tasas-dgt' && (
           <div>
-            <h2 className="text-lg font-bold mb-3">Tarifas Oficiales de la Jefatura Central de Tráfico (DGT)</h2>
+            <h2 className="text-lg font-bold mb-3">Tarifas de la Jefatura Central de Tráfico (DGT)</h2>
             <div className="table-responsive mb-6">
               <table className="guide-table">
                 <thead>
                   <tr>
                     <th>Código de Tasa</th>
                     <th>Concepto del Trámite</th>
-                    <th>Importe Oficial</th>
+                    <th>Importe según la norma</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -222,6 +222,7 @@ export default async function GuiaTemaPage({
         <div className="mt-6">
           <VerificationNotice
             anio={2026}
+            estadoVerificacion={guia.estadoVerificacion}
             fechaVerificacion={guia.fechaVerificacion}
             fuente={guia.fuente}
             norma={guia.norma}

@@ -2,8 +2,8 @@
   "anio": 2026,
   "norma": "Orden HAC/1484/2024, de 26 de diciembre, por la que se aprueban los precios medios de venta aplicables en la gestión del ITP y AJD, ISD e IEDMT (Anexo IV)",
   "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-  "fechaVerificacion": "2026-01-15",
-  "verificado": true,
+  "estadoVerificacion": "pendiente",
+  "fechaVerificacion": null,
   "tramos": [
     {
       "minAnios": 0,
@@ -13,8 +13,8 @@
       "porcentaje": 100,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 1.0001,
@@ -24,8 +24,8 @@
       "porcentaje": 84,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 2.0001,
@@ -35,8 +35,8 @@
       "porcentaje": 67,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 3.0001,
@@ -46,8 +46,8 @@
       "porcentaje": 56,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 4.0001,
@@ -57,8 +57,8 @@
       "porcentaje": 47,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 5.0001,
@@ -68,8 +68,8 @@
       "porcentaje": 39,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 6.0001,
@@ -79,8 +79,8 @@
       "porcentaje": 34,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 7.0001,
@@ -90,8 +90,8 @@
       "porcentaje": 28,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 8.0001,
@@ -101,8 +101,8 @@
       "porcentaje": 24,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 9.0001,
@@ -112,8 +112,8 @@
       "porcentaje": 19,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 10.0001,
@@ -123,8 +123,8 @@
       "porcentaje": 17,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 11.0001,
@@ -134,8 +134,8 @@
       "porcentaje": 13,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     {
       "minAnios": 12.0001,
@@ -145,8 +145,8 @@
       "porcentaje": 10,
       "norma": "Orden HAC/1484/2024, Anexo IV",
       "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     }
   ]
 }

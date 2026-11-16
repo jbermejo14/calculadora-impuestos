@@ -1,5 +1,6 @@
 'use client';
 
+import { etiquetaVerificacion } from '@/lib/verification';
 import React, { useState, useId } from 'react';
 import { calcularITP, getComunidadesList } from '@/lib/itp';
 import { VerificationNotice } from './VerificationNotice';
@@ -137,7 +138,7 @@ export function CalculadoraTransferencia({
             <div className="form-group">
               <label htmlFor={boeInputId} className="form-label">
                 Valor Tablas BOE (Nuevo)
-                <span className="tooltip-icon" title="Precio oficial que Hacienda asigna al modelo nuevo según la Orden Ministerial anual publicada en el BOE.">ⓘ</span>
+                <span className="tooltip-icon" title="Precio que Hacienda asigna al modelo nuevo según la Orden Ministerial anual publicada en el BOE.">ⓘ</span>
               </label>
               <div className="input-addon-group">
                 <input
@@ -271,7 +272,7 @@ export function CalculadoraTransferencia({
       <div className="card results-card">
         <div className="card-header">
           <h2 className="card-title">Coste Total de la Transferencia</h2>
-          <span className="status-pill status-ready">Verificado 2026</span>
+          <span className="status-pill status-ready">{etiquetaVerificacion(resultado.estadoVerificacion, resultado.anio)}</span>
         </div>
 
         <div className="total-highlight">
@@ -295,7 +296,7 @@ export function CalculadoraTransferencia({
             <div className="breakdown-item">
               <div className="item-info">
                 <span className="item-title">Tasa DGT {resultado.tasaDgtCodigo} {resultado.tasaDgtConcepto}</span>
-                <span className="item-detail">Tasa administrativa DGT oficial</span>
+                <span className="item-detail">Tasa administrativa DGT</span>
               </div>
               <span className="item-val">{formatEUR(resultado.tasaDgtImporte)}</span>
             </div>
@@ -339,6 +340,7 @@ export function CalculadoraTransferencia({
         {/* Verificación Obligatoria */}
         <VerificationNotice
           anio={resultado.anio}
+          estadoVerificacion={resultado.estadoVerificacion}
           fechaVerificacion={resultado.fechaVerificacion}
           fuente={resultado.fuente}
           norma={resultado.norma}

@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: 'AutoTax',
     title: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP',
-    description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT verificadas.'
+    description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT (datos pendientes de revisión).'
   }
 };
 

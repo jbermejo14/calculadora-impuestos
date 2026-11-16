@@ -12,7 +12,7 @@ export function Footer() {
           <strong>AutoTax España</strong> &bull; Calculadora fiscal de vehículos para particulares y profesionales.
         </p>
         <p className="footer-subtext">
-          Valores fiscales del ejercicio 2026 verificados con base en la Ley 38/1992 de Impuestos Especiales, la Orden HAC/1484/2024 de precios medios de venta y coeficientes de depreciación del BOE, las tasas oficiales de la DGT y las leyes autonómicas de tributos cedidos.
+          Valores fiscales del ejercicio 2026 pendientes de revisión contra la fuente, basados en la Ley 38/1992 de Impuestos Especiales, la Orden HAC/1484/2024 de precios medios de venta y coeficientes de depreciación del BOE, las tasas de la DGT y las leyes autonómicas de tributos cedidos.
         </p>
         <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-slate-500 mt-2">
           <span>Comunidades Autónomas:</span>

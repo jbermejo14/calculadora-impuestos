@@ -2,8 +2,8 @@
   "anio": 2026,
   "norma": "Real Decreto Legislativo 6/2015, de 30 de octubre, por el que se aprueba el texto refundido de la Ley sobre Tráfico, Circulación de Vehículos a Motor y Seguridad Vial (Anexo de Tasas DGT)",
   "fuente": "https://sede.dgt.gob.es/es/tasas/",
-  "fechaVerificacion": "2026-01-15",
-  "verificado": true,
+  "estadoVerificacion": "pendiente",
+  "fechaVerificacion": null,
   "tasas": {
     "transferenciaOrdinaria": {
       "codigo": "1.5",
@@ -11,8 +11,8 @@
       "importe": 55.70,
       "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.5",
       "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     "transferenciaCiclomotor": {
       "codigo": "1.2",
@@ -20,8 +20,8 @@
       "importe": 27.85,
       "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.2",
       "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     "matriculacionOrdinaria": {
       "codigo": "1.1",
@@ -29,8 +29,8 @@
       "importe": 99.77,
       "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.1",
       "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     "matriculacionCiclomotor": {
       "codigo": "1.2",
@@ -38,8 +38,8 @@
       "importe": 27.85,
       "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.2",
       "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     "informeVehiculo": {
       "codigo": "4.1",
@@ -47,8 +47,8 @@
       "importe": 8.67,
       "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 4.1",
       "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     }
   }
 }

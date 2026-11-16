@@ -1,3 +1,4 @@
+import type { EstadoVerificacion } from '@/lib/verification';
 import iedmt2026 from '../data/2026/iedmt.json';
 import { getTasaMatriculacion } from './fees';
 
@@ -9,8 +10,8 @@ export interface TramoIEDMT {
   tipoPorcentaje: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
 }
 
 export interface TerritorioIEDMT {
@@ -18,8 +19,8 @@ export interface TerritorioIEDMT {
   slug: string;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   tramos: TramoIEDMT[];
 }
 
@@ -30,16 +31,16 @@ export interface BonificacionIEDMT {
   descripcion: string;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
 }
 
 export interface IEDMTData {
   anio: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   territorios: Record<string, TerritorioIEDMT>;
   bonificaciones: {
     familiaNumerosa: BonificacionIEDMT;
@@ -68,7 +69,8 @@ export interface CalculoIEDMTResultado {
     nombre: string;
     norma: string;
     fuente: string;
-    fechaVerificacion: string;
+    estadoVerificacion: EstadoVerificacion;
+    fechaVerificacion: string | null;
   };
   baseImponibleOriginal: number;
   baseImponibleAplicada: number;
@@ -90,7 +92,8 @@ export interface CalculoIEDMTResultado {
   exencionAplicada: string | null;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   avisoLegal: string;
 }
 
@@ -216,6 +219,7 @@ export function calcularIEDMT(params: CalculoIEDMTParams): CalculoIEDMTResultado
       nombre: territorio.nombre,
       norma: territorio.norma,
       fuente: territorio.fuente,
+      estadoVerificacion: territorio.estadoVerificacion,
       fechaVerificacion: territorio.fechaVerificacion
     },
     baseImponibleOriginal: Number(baseOriginal.toFixed(2)),
@@ -238,7 +242,8 @@ export function calcularIEDMT(params: CalculoIEDMTParams): CalculoIEDMTResultado
     exencionAplicada,
     norma: tramo.norma,
     fuente: tramo.fuente,
+    estadoVerificacion: tramo.estadoVerificacion,
     fechaVerificacion: tramo.fechaVerificacion,
-    avisoLegal: 'Cálculo orientativo con datos fiscales verificados. La liquidación oficial definitiva la realiza la Agencia Estatal de Administración Tributaria (AEAT) o el órgano tributario de la comunidad autónoma correspondiente.'
+    avisoLegal: 'Cálculo orientativo con datos fiscales pendientes de revisión contra la fuente. La liquidación oficial definitiva la realiza la Agencia Estatal de Administración Tributaria (AEAT) o el órgano tributario de la comunidad autónoma correspondiente.'
   };
 }

@@ -1,10 +1,10 @@
 # AutoTax: Calculadora de Impuestos de Vehículos (2026)
 
-Aplicación web desarrollada con **Next.js (App Router)** para calcular de forma oficial, verificada y orientativa los tributos exigidos en España al registrar o transferir un vehículo:
+Aplicación web desarrollada con **Next.js (App Router)** para calcular de forma orientativa los tributos exigidos en España al registrar o transferir un vehículo:
 
-1. **Impuesto Especial sobre Determinados Medios de Transporte (IEDMT - Modelo 576 AEAT):** Primera matriculación de vehículos nuevos o de importación según emisiones oficiales de $CO_2$ (WLTP), con regímenes diferenciados para Península y Baleares, Canarias (REF) y Ceuta y Melilla (0 %).
+1. **Impuesto Especial sobre Determinados Medios de Transporte (IEDMT - Modelo 576 AEAT):** Primera matriculación de vehículos nuevos o de importación según emisiones de $CO_2$ (WLTP), con regímenes diferenciados para Península y Baleares, Canarias (REF) y Ceuta y Melilla (0 %).
 2. **Impuesto de Transmisiones Patrimoniales Onerosas (ITP - Modelos 620 y 621):** Compraventa de vehículos usados entre particulares según las normas de las 17 Comunidades Autónomas y de las Ciudades Autónomas de Ceuta y Melilla. Aplica la tabla de depreciación por antigüedad del BOE (Anexo IV) y calcula la base liquidable mínima de Hacienda para evitar liquidaciones complementarias (paralelas).
-3. **Tasas Oficiales de la DGT:** Tarifas actualizadas de Tráfico para cambio de titularidad (Tasa 1.5 de 55,70 € o Tasa 1.2 de 27,85 € para ciclomotores) y matriculación ordinaria (Tasa 1.1 de 99,77 €).
+3. **Tasas de la DGT:** Tarifas actualizadas de Tráfico para cambio de titularidad (Tasa 1.5 de 55,70 € o Tasa 1.2 de 27,85 € para ciclomotores) y matriculación ordinaria (Tasa 1.1 de 99,77 €).
 
 ---
 
@@ -63,7 +63,7 @@ npm test
 ```
 
 ### Qué verifican las pruebas:
-1. **Integridad de Fuentes y Datos (`tests/data-sources.test.ts`):** Falla si falta algún archivo fiscal del año en curso, si falta la URL de la fuente oficial en algún dato, si no se especifica la norma legal o si la fecha de verificación ISO no es válida.
+1. **Integridad de Fuentes y Datos (`tests/data-sources.test.ts`):** Falla si falta algún archivo fiscal del año en curso, si falta la URL de la fuente en algún dato, si no se especifica la norma legal, si el estado de verificación no es válido o si un dato verificado no lleva fecha ISO (los pendientes deben llevar `null`). `tests/verification.test.ts` cubre el texto "Verificado el {fecha}".
 2. **Impuesto de Matriculación (`tests/iedmt.test.ts`):** Comprueba cada tramo de $CO_2$ en Península (0 %, 4,75 %, 9,75 %, 14,75 %), Canarias (0 %, 3,75 %, 8,75 %, 13,75 %), Ceuta y Melilla (0 %), bonificación del 50 % por Familia Numerosa, exención por Minusvalía y exención para vehículos comerciales.
 3. **ITP y Depreciación BOE (`tests/itp.test.ts`):** Comprueba el ITP de las 17 comunidades autónomas y de Ceuta y Melilla con al menos un caso real, las fronteras exactas de los 13 tramos de depreciación del Anexo IV del BOE, compraventa profesional (no sujeta a ITP), ciclomotores exentos, vehículos históricos, exención de coches de más de 10 años en Cataluña y Navarra, y bonificación etiqueta CERO emisiones.
 4. **Rutas Estáticas y SEO (`tests/routes-and-sitemap.test.ts`):** Valida todos los slugs de comunidades, territorios y guías, respuesta 404 para slugs inválidos, y la generación íntegra del sitemap (27 páginas canónicas) y robots.txt.
@@ -92,8 +92,8 @@ Los datos fiscales no están incrustados en componentes visuales, sino organizad
    Todo dato debe incluir obligatoriamente:
    - `fuente`: URL directa al BOE o boletín oficial autonómico (`https://...`).
    - `norma`: Título del texto legal y artículo (ej. `Ley 5/2021, artículo 43`).
-   - `fechaVerificacion`: Fecha en formato ISO `YYYY-MM-DD`.
-   - `verificado`: `true`.
+   - `estadoVerificacion`: `"pendiente"` (valor inicial) o `"verificado"`. Solo se pasa a `"verificado"` tras contrastar el valor con su fuente.
+   - `fechaVerificacion`: `null` mientras esté pendiente; fecha ISO `YYYY-MM-DD` de la verificación real cuando esté `"verificado"`. La web muestra "Verificado el {fecha}" solo en ese caso; si no, "Datos fiscales pendientes de revisión contra la fuente. Cálculo orientativo."
 
 4. **Registrar el año en los módulos de lib:**
    Importar el nuevo JSON en `lib/fees.ts`, `lib/iedmt.ts` e `lib/itp.ts`, y añadirlo al mapa de años correspondiente.
@@ -117,7 +117,7 @@ calculadora-impuestos/
 │   ├── page.tsx                          # Home: calculadoras matriculación e ITP
 │   ├── robots.ts                         # Generación dinámica de robots.txt
 │   ├── sitemap.ts                        # Generación dinámica de sitemap.xml
-│   ├── guia/[tema]/page.tsx              # 4 páginas estáticas de guías oficiales
+│   ├── guia/[tema]/page.tsx              # 4 páginas estáticas de guías
 │   ├── impuesto-matriculacion/[territorio]/page.tsx  # 3 páginas por territorio
 │   └── itp-coche-segunda-mano/[comunidad]/page.tsx   # 19 páginas por CCAA
 ├── components/
@@ -129,7 +129,7 @@ calculadora-impuestos/
 │   ├── HomeTabs.tsx                      # Pestañas de navegación de la home
 │   └── VerificationNotice.tsx            # Aviso de verificación con enlace a norma
 ├── data/
-│   └── 2026/                             # Datos fiscales versionados con fuente oficial
+│   └── 2026/                             # Datos fiscales versionados con fuente
 │       ├── depreciacion.json
 │       ├── guias.json
 │       ├── iedmt.json

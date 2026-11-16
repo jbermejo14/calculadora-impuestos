@@ -11,7 +11,7 @@ export default function HomePage() {
           Calculadora de Impuestos de Vehículos (2026)
         </h1>
         <p className="text-sm md:text-base text-slate-400">
-          Simulador oficial del <strong>Impuesto de Matriculación (IEDMT)</strong> y del{' '}
+          Simulador del <strong>Impuesto de Matriculación (IEDMT)</strong> y del{' '}
           <strong>Impuesto de Transmisiones Patrimoniales (ITP)</strong> para compraventas de segunda mano con tasas DGT actualizadas.
         </p>
       </div>

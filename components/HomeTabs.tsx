@@ -90,7 +90,7 @@ export function HomeTabs({ comunidades }: HomeTabsProps) {
         <section aria-label="Calculadora de Transferencia ITP">
           <div className="mb-4">
             <span className="text-xs text-slate-400 block mb-1">
-              Calculadoras oficiales por Comunidad Autónoma (con tipos específicos y bonificaciones):
+              Calculadoras por Comunidad Autónoma (con tipos específicos y bonificaciones):
             </span>
             <div className="flex flex-wrap gap-1.5 text-xs">
               {comunidades.map(com => (
@@ -132,7 +132,7 @@ export function HomeTabs({ comunidades }: HomeTabsProps) {
                   </Link>
                 </div>
                 <p className="guide-text">
-                  Regulado por la Ley 38/1992 de Impuestos Especiales. Se liquida a través del <strong>Modelo 576</strong> de la AEAT según emisiones oficiales de CO₂:
+                  Regulado por la Ley 38/1992 de Impuestos Especiales. Se liquida a través del <strong>Modelo 576</strong> de la AEAT según emisiones de CO₂:
                 </p>
                 <div className="table-responsive">
                   <table className="guide-table">
@@ -240,7 +240,7 @@ export function HomeTabs({ comunidades }: HomeTabsProps) {
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="guide-card-title mb-0">
                     <span className="badge-num">3</span>
-                    Tasas Oficiales DGT
+                    Tasas DGT
                   </h3>
                   <Link href="/guia/tasas-dgt" className="text-xs text-orange-500 hover:underline font-semibold">
                     Ver desglose de tasas →

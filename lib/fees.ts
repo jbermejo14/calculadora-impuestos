@@ -1,3 +1,4 @@
+import type { EstadoVerificacion } from '@/lib/verification';
 import tasasDgt2026 from '../data/2026/tasas-dgt.json';
 
 export interface TasaDgtInfo {
@@ -6,16 +7,16 @@ export interface TasaDgtInfo {
   importe: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
 }
 
 export interface TasasDgtData {
   anio: number;
   norma: string;
   fuente: string;
-  fechaVerificacion: string;
-  verificado: boolean;
+  estadoVerificacion: EstadoVerificacion;
+  fechaVerificacion: string | null;
   tasas: {
     transferenciaOrdinaria: TasaDgtInfo;
     transferenciaCiclomotor: TasaDgtInfo;

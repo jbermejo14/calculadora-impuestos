@@ -2,16 +2,16 @@
   "anio": 2026,
   "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales (Título II: Impuesto Especial sobre Determinados Medios de Transporte)",
   "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741",
-  "fechaVerificacion": "2026-01-15",
-  "verificado": true,
+  "estadoVerificacion": "pendiente",
+  "fechaVerificacion": null,
   "territorios": {
     "peninsula-y-baleares": {
       "nombre": "Península e Islas Baleares",
       "slug": "peninsula-y-baleares",
       "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales, artículo 70.1",
       "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true,
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null,
       "tramos": [
         {
           "epigrafe": "1.º",
@@ -21,8 +21,8 @@
           "tipoPorcentaje": 0.0,
           "norma": "Ley 38/1992, art. 70.1.Epígrafe 1.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "2.º",
@@ -32,8 +32,8 @@
           "tipoPorcentaje": 4.75,
           "norma": "Ley 38/1992, art. 70.1.Epígrafe 2.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "3.º",
@@ -43,8 +43,8 @@
           "tipoPorcentaje": 9.75,
           "norma": "Ley 38/1992, art. 70.1.Epígrafe 3.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "4.º",
@@ -54,8 +54,8 @@
           "tipoPorcentaje": 14.75,
           "norma": "Ley 38/1992, art. 70.1.Epígrafe 4.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         }
       ]
     },
@@ -64,8 +64,8 @@
       "slug": "canarias",
       "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales, artículo 70.2",
       "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true,
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null,
       "tramos": [
         {
           "epigrafe": "1.º",
@@ -75,8 +75,8 @@
           "tipoPorcentaje": 0.0,
           "norma": "Ley 38/1992, art. 70.2.a.Epígrafe 1.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "2.º",
@@ -86,8 +86,8 @@
           "tipoPorcentaje": 3.75,
           "norma": "Ley 38/1992, art. 70.2.a.Epígrafe 2.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "3.º",
@@ -97,8 +97,8 @@
           "tipoPorcentaje": 8.75,
           "norma": "Ley 38/1992, art. 70.2.a.Epígrafe 3.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "4.º",
@@ -108,8 +108,8 @@
           "tipoPorcentaje": 13.75,
           "norma": "Ley 38/1992, art. 70.2.a.Epígrafe 4.º",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         }
       ]
     },
@@ -118,8 +118,8 @@
       "slug": "ceuta-y-melilla",
       "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales, artículo 70.3",
       "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true,
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null,
       "tramos": [
         {
           "epigrafe": "1.º",
@@ -129,8 +129,8 @@
           "tipoPorcentaje": 0.0,
           "norma": "Ley 38/1992, art. 70.3",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "2.º",
@@ -140,8 +140,8 @@
           "tipoPorcentaje": 0.0,
           "norma": "Ley 38/1992, art. 70.3",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "3.º",
@@ -151,8 +151,8 @@
           "tipoPorcentaje": 0.0,
           "norma": "Ley 38/1992, art. 70.3",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         },
         {
           "epigrafe": "4.º",
@@ -162,8 +162,8 @@
           "tipoPorcentaje": 0.0,
           "norma": "Ley 38/1992, art. 70.3",
           "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a70",
-          "fechaVerificacion": "2026-01-15",
-          "verificado": true
+          "estadoVerificacion": "pendiente",
+          "fechaVerificacion": null
         }
       ]
     }
@@ -175,8 +175,8 @@
       "descripcion": "Reducción del 50 % sobre la base imponible del impuesto para vehículos de 5 a 9 plazas a nombre del progenitor de familia numerosa.",
       "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales, artículo 66.4",
       "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a66",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     "minusvalia": {
       "nombre": "Exención por Movilidad Reducida / Minusvalía",
@@ -184,8 +184,8 @@
       "descripcion": "Exención total del IEDMT para vehículos matriculados a nombre de personas con discapacidad para su uso exclusivo.",
       "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales, artículo 65.1.a",
       "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a65",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     },
     "comercial": {
       "nombre": "No sujeción / Exención para Vehículo Comercial Afecto",
@@ -193,8 +193,8 @@
       "descripcion": "No sujeción o exención para vehículos mixtos adaptables o comerciales afectos de forma exclusiva al ejercicio de una actividad económica o transporte de mercancías.",
       "norma": "Ley 38/1992, de 28 de diciembre, de Impuestos Especiales, artículo 65.1.a",
       "fuente": "https://www.boe.es/buscar/act.php?id=BOE-A-1992-28741#a65",
-      "fechaVerificacion": "2026-01-15",
-      "verificado": true
+      "estadoVerificacion": "pendiente",
+      "fechaVerificacion": null
     }
   }
 }

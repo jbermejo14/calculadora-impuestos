@@ -1,5 +1,6 @@
 'use client';
 
+import { etiquetaVerificacion } from '@/lib/verification';
 import React, { useState, useId } from 'react';
 import { calcularIEDMT } from '@/lib/iedmt';
 import { VerificationNotice } from './VerificationNotice';
@@ -260,7 +261,7 @@ export function CalculadoraMatriculacion({
       <div className="card results-card">
         <div className="card-header">
           <h2 className="card-title">Desglose de Costes de Matriculación</h2>
-          <span className="status-pill status-ready">Verificado 2026</span>
+          <span className="status-pill status-ready">{etiquetaVerificacion(resultado.estadoVerificacion, resultado.anio)}</span>
         </div>
 
         <div className="total-highlight">
@@ -314,6 +315,7 @@ export function CalculadoraMatriculacion({
         {/* Verificación Obligatoria */}
         <VerificationNotice
           anio={resultado.anio}
+          estadoVerificacion={resultado.estadoVerificacion}
           fechaVerificacion={resultado.fechaVerificacion}
           fuente={resultado.fuente}
           norma={resultado.norma}

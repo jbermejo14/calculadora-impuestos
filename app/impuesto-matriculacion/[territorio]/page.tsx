@@ -80,19 +80,19 @@ export default async function TerritorioMatriculacionPage({
       {/* Cabecera */}
       <div className="mb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 text-orange-500 text-xs font-bold uppercase tracking-wider mb-2">
-          Ejercicio Fiscal 2026 Verificado
+          Ejercicio Fiscal 2026: pendiente de revisión
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           Impuesto de Matriculación en {terr.nombre} (2026)
         </h1>
         <p className="text-sm md:text-base text-slate-400">
-          Tipos impositivos del Modelo 576 de la AEAT según emisiones oficiales de CO₂ (ciclo WLTP) para {terr.nombre}.
+          Tipos impositivos del Modelo 576 de la AEAT según emisiones de CO₂ (ciclo WLTP) para {terr.nombre}.
         </p>
       </div>
 
       {/* Tabla de Tramos */}
       <div className="card mb-8">
-        <h2 className="text-lg font-bold mb-3">Tramos Oficiales de Emisiones de CO₂ en {terr.nombre}</h2>
+        <h2 className="text-lg font-bold mb-3">Tramos de Emisiones de CO₂ en {terr.nombre}</h2>
         <div className="table-responsive mb-4">
           <table className="guide-table">
             <thead>
@@ -122,6 +122,7 @@ export default async function TerritorioMatriculacionPage({
 
         <VerificationNotice
           anio={2026}
+          estadoVerificacion={terr.estadoVerificacion}
           fechaVerificacion={terr.fechaVerificacion}
           fuente={terr.fuente}
           norma={terr.norma}
