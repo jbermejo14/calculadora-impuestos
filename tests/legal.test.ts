@@ -1,6 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { camposPendientes, FECHA_TEXTOS_LEGALES, getTitular, valorOPendiente, type Titular } from '../lib/legal';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { camposPendientes, FECHA_TEXTOS_LEGALES, ficheroTitular, getTitular, valorOPendiente, type Titular } from '../lib/legal';
 
 const LEGAL_TITULAR_COMPLETO: Titular = {
   tipo: 'persona-fisica',
@@ -38,4 +41,34 @@ test('valorOPendiente devuelve el valor o el marcador', () => {
 
 test('FECHA_TEXTOS_LEGALES es una fecha ISO', () => {
   assert.match(FECHA_TEXTOS_LEGALES, /^\d{4}-\d{2}-\d{2}$/);
+});
+
+function legalDirectorioConfig(ficheros: Record<string, unknown>): string {
+  const base = mkdtempSync(join(tmpdir(), 'legal-test-'));
+  mkdirSync(join(base, 'config'));
+  for (const [nombre, contenido] of Object.entries(ficheros)) {
+    writeFileSync(join(base, 'config', nombre), JSON.stringify(contenido));
+  }
+  return base;
+}
+
+const LEGAL_PLANTILLA_VACIA = { tipo: 'persona-fisica', nombre: '', nif: '', domicilio: '', email: '', registroMercantil: '' };
+
+test('getTitular usa la plantilla cuando no existe config/titular.json', () => {
+  const base = legalDirectorioConfig({ 'titular.example.json': LEGAL_PLANTILLA_VACIA });
+  assert.equal(ficheroTitular(base), join('config', 'titular.example.json'));
+  assert.deepEqual(camposPendientes(getTitular(base)), ['nombre', 'nif', 'domicilio', 'email']);
+});
+
+test('getTitular prefiere config/titular.json a la plantilla', () => {
+  const base = legalDirectorioConfig({
+    'titular.example.json': LEGAL_PLANTILLA_VACIA,
+    'titular.json': { ...LEGAL_TITULAR_COMPLETO }
+  });
+  assert.equal(getTitular(base).nombre, 'Titular de prueba');
+});
+
+test('getTitular nombra el fichero cuando el tipo no es válido', () => {
+  const base = legalDirectorioConfig({ 'titular.json': { ...LEGAL_PLANTILLA_VACIA, tipo: 'autonomo' } });
+  assert.throws(() => getTitular(base), /config.titular\.json: el campo "tipo"/);
 });

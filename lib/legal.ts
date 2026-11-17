@@ -1,4 +1,5 @@
-import titularJson from '@/config/titular.json';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 export type TipoTitular = 'persona-fisica' | 'empresa';
 
@@ -18,21 +19,33 @@ const TIPOS_TITULAR: readonly TipoTitular[] = ['persona-fisica', 'empresa'];
 const CAMPOS_TEXTO = ['nombre', 'nif', 'domicilio', 'email', 'registroMercantil'] as const;
 const CAMPOS_OBLIGATORIOS = ['nombre', 'nif', 'domicilio', 'email'] as const;
 
+const FICHERO_TITULAR = join('config', 'titular.json');
+// Plantilla versionada con los campos vacíos. titular.json no está en git porque
+// contiene datos personales; sin él, las páginas muestran los marcadores pendientes.
+const FICHERO_TITULAR_EJEMPLO = join('config', 'titular.example.json');
+
+/** Ruta relativa del fichero de titular que se usará: el real si existe, si no la plantilla. */
+export function ficheroTitular(directorioBase: string = process.cwd()): string {
+  return existsSync(join(directorioBase, FICHERO_TITULAR)) ? FICHERO_TITULAR : FICHERO_TITULAR_EJEMPLO;
+}
+
 /**
- * Lee y valida config/titular.json. Lanza Error con el campo y el motivo
- * si falta una clave o el tipo no es válido.
+ * Lee y valida config/titular.json (o config/titular.example.json si el primero
+ * no existe). Lanza Error con el fichero, el campo y el motivo si falta una clave
+ * o el tipo no es válido.
  */
-export function getTitular(): Titular {
-  const datos = titularJson as Record<string, unknown>;
+export function getTitular(directorioBase: string = process.cwd()): Titular {
+  const fichero = ficheroTitular(directorioBase);
+  const datos = JSON.parse(readFileSync(join(directorioBase, fichero), 'utf8')) as Record<string, unknown>;
   const tipo = datos.tipo;
   if (typeof tipo !== 'string' || !TIPOS_TITULAR.includes(tipo as TipoTitular)) {
     throw new Error(
-      `config/titular.json: el campo "tipo" debe ser "persona-fisica" o "empresa" (valor actual: ${JSON.stringify(tipo)}).`
+      `${fichero}: el campo "tipo" debe ser "persona-fisica" o "empresa" (valor actual: ${JSON.stringify(tipo)}).`
     );
   }
   for (const campo of CAMPOS_TEXTO) {
     if (typeof datos[campo] !== 'string') {
-      throw new Error(`config/titular.json: falta el campo "${campo}" o no es una cadena de texto.`);
+      throw new Error(`${fichero}: falta el campo "${campo}" o no es una cadena de texto.`);
     }
   }
   return {

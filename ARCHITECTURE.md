@@ -352,14 +352,17 @@ export function assetPath(path: string): string;
 - `tipo` admite `persona-fisica` o `empresa`.
 - `registroMercantil` solo se usa con `tipo: "empresa"`.
 - Un campo vacío es un dato pendiente.
+- `config/titular.json` no está en git (`.gitignore`), porque contiene datos personales. En git va la plantilla `config/titular.example.json`, con todos los campos vacíos. Si falta el fichero real, se usa la plantilla.
 
 **`lib/legal.ts`** (interfaz pública):
 
 ```ts
 export type TipoTitular = 'persona-fisica' | 'empresa';
 export interface Titular { tipo: TipoTitular; nombre: string; nif: string; domicilio: string; email: string; registroMercantil: string; }
-/** Lee y valida config/titular.json. Lanza Error con el campo y el motivo si falta una clave o el tipo no es válido. */
-export function getTitular(): Titular;
+/** Ruta relativa del fichero que se usará: config/titular.json si existe, si no config/titular.example.json. */
+export function ficheroTitular(directorioBase?: string): string;
+/** Lee y valida ese fichero (directorioBase por defecto process.cwd()). Lanza Error con el fichero, el campo y el motivo si falta una clave o el tipo no es válido. */
+export function getTitular(directorioBase?: string): Titular;
 /** Nombres de los campos obligatorios vacíos (registroMercantil solo cuenta para empresa). */
 export function camposPendientes(titular: Titular): string[];
 /** Valor del campo o el marcador visible "[pendiente: <campo>]". */
