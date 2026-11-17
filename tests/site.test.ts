@@ -72,3 +72,7 @@ test('ningún .tsx de app/ ni components/ usa src="/ literal', () => {
 test('next.config.ts usa la misma ruta base que lib/site.ts', () => {
   assert.equal(nextConfig.basePath, BASE_PATH);
 });
+
+test('next.config.ts exporta el sitio como ficheros estáticos', () => {
+  assert.equal(nextConfig.output, 'export');
+});

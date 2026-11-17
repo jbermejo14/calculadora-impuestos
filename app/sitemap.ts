@@ -4,6 +4,9 @@ import { getComunidadesList } from '@/lib/itp';
 import { getIEDMTData } from '@/lib/iedmt';
 import guias2026 from '@/data/2026/guias.json';
 
+// Con `output: 'export'` el sitemap debe declararse estático para generarse en el build.
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 

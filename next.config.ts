@@ -5,8 +5,10 @@ import type { NextConfig } from 'next';
 // importaciones TypeScript sin extensión.
 const BASE_PATH = '/es/impuestos';
 
+// Exportación estática: el sitio se publica como ficheros en Cloudflare Pages (ver ../ododex-sitio).
 const nextConfig: NextConfig = {
   basePath: BASE_PATH,
+  output: 'export',
   reactStrictMode: true
 };
 
