@@ -839,6 +839,63 @@ body {
   color: var(--text-muted);
 }
 
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1rem;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+}
+
+.footer-legal a,
+.footer-link-button {
+  color: var(--text-muted);
+  background: none;
+  border: 0;
+  padding: 0.5rem 0;
+  font: inherit;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.footer-legal a:hover,
+.footer-link-button:hover {
+  color: var(--accent-primary);
+}
+
+.legal-text h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.legal-text h2:first-child {
+  margin-top: 0;
+}
+
+.legal-text p,
+.legal-text li {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text-primary);
+}
+
+.legal-text p {
+  margin-bottom: 0.75rem;
+}
+
+.legal-text ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.legal-text a {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}
+
 /* Breadcrumbs */
 .breadcrumbs {
   display: flex;

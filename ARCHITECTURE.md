@@ -288,6 +288,146 @@ Texto legal: Ley 38/1992, arts. 65, 66 y 70 (BOE-A-1992-28741, consolidado, últ
   - Baleares ECO.
 - `npm test` y `npm run build` pasan.
 
+## 2.9 Ruta base `/es/impuestos` (red Ododex)
+
+La web se publica dentro de la red `ododex.com`, bajo la ruta `/es/impuestos`. Todas las páginas cuelgan de ella:
+
+| Página | URL pública |
+|---|---|
+| Inicio | `/es/impuestos` |
+| ITP por comunidad | `/es/impuestos/itp-coche-segunda-mano/<comunidad>` |
+| Matriculación por territorio | `/es/impuestos/impuesto-matriculacion/<territorio>` |
+| Guías | `/es/impuestos/guia/<tema>` |
+| Legales (2.10) | `/es/impuestos/aviso-legal`, `/es/impuestos/privacidad`, `/es/impuestos/cookies` |
+
+Se resuelve con `basePath` de Next, no moviendo carpetas de `app/`.
+
+**`lib/site.ts`** (interfaz pública):
+
+```ts
+/** Ruta bajo la que se publica la web dentro de ododex.com. Sin barra final. */
+export const BASE_PATH = '/es/impuestos';
+/** Origen del sitio, sin ruta ni barra final. Variable NEXT_PUBLIC_SITE_URL; por defecto http://localhost:3000. */
+export function getSiteUrl(): string;
+/** URL absoluta de una ruta de la web: origen + BASE_PATH + ruta. absoluteUrl('/') → 'https://ododex.com/es/impuestos'. */
+export function absoluteUrl(path: string): string;
+/** Ruta de un fichero de public/ con la ruta base, para <img>, <a> sin next/link y scripts: assetPath('/brand/x.svg') → '/es/impuestos/brand/x.svg'. */
+export function assetPath(path: string): string;
+```
+
+- `absoluteUrl('/')` y `absoluteUrl('')` devuelven el origen más `BASE_PATH`, sin barra final.
+- `next.config.ts` importa `BASE_PATH` y lo pone en `basePath`.
+- `next/link`, `next/navigation` y los ficheros de metadatos (`icon.svg`, `sitemap.ts`) añaden la ruta base solos. Los `href` de `<Link>` no cambian.
+- Todo `<img src>`, `<a href>` sin `next/link` o URL a `public/` pasa por `assetPath` (hoy: `BrandLogo`).
+- Canonical, Open Graph, JSON-LD de las migas y sitemap usan `absoluteUrl`.
+- `NEXT_PUBLIC_SITE_URL` pasa a ser solo el origen (`https://ododex.com`). Se actualiza el comentario de ejemplo del fichero `.env*` del proyecto.
+- **`robots.txt` y `ads.txt`** solo valen en la raíz del dominio, que no sirve esta web. Se borra `app/robots.ts`. El README explica qué deben contener los de la raíz de `ododex.com`:
+  - `robots.txt` con `Sitemap: https://ododex.com/es/impuestos/sitemap.xml`;
+  - `ads.txt` con la línea de AdSense.
+
+**Criterio de aceptación:**
+
+- `tests/site.test.ts` cubre `absoluteUrl` (raíz, ruta con y sin barra inicial, origen con barra final) y `assetPath`.
+- Una prueba comprueba que ningún `.tsx` de `app/` ni `components/` contiene `src="/` o `href="/` en un `<img>` o un `<a>` sin `assetPath`. Basta con que no aparezca `src="/` literal.
+- En `next dev`:
+  - `/es/impuestos` y sus subpáginas cargan;
+  - el logo se ve;
+  - los enlaces internos llevan la ruta base.
+
+## 2.10 Páginas legales y consentimiento (Google Privacy & messaging)
+
+**Datos del titular** fuera del código, en `config/titular.json`:
+
+```json
+{
+  "tipo": "persona-fisica",
+  "nombre": "",
+  "nif": "",
+  "domicilio": "",
+  "email": "",
+  "registroMercantil": ""
+}
+```
+
+- `tipo` admite `persona-fisica` o `empresa`.
+- `registroMercantil` solo se usa con `tipo: "empresa"`.
+- Un campo vacío es un dato pendiente.
+
+**`lib/legal.ts`** (interfaz pública):
+
+```ts
+export type TipoTitular = 'persona-fisica' | 'empresa';
+export interface Titular { tipo: TipoTitular; nombre: string; nif: string; domicilio: string; email: string; registroMercantil: string; }
+/** Lee y valida config/titular.json. Lanza Error con el campo y el motivo si falta una clave o el tipo no es válido. */
+export function getTitular(): Titular;
+/** Nombres de los campos obligatorios vacíos (registroMercantil solo cuenta para empresa). */
+export function camposPendientes(titular: Titular): string[];
+/** Valor del campo o el marcador visible "[pendiente: <campo>]". */
+export function valorOPendiente(titular: Titular, campo: keyof Titular): string;
+/** Fecha de la última revisión de los textos legales, ISO. Constante. */
+export const FECHA_TEXTOS_LEGALES: string;
+```
+
+**Páginas** (`app/aviso-legal/page.tsx`, `app/privacidad/page.tsx`, `app/cookies/page.tsx`):
+
+- Son estáticas, con `robots: { index: false, follow: true }` y sin entrada en el sitemap.
+- Usan `Breadcrumbs` y las clases `card` y `main-wrapper`, como las guías.
+- Texto en español, claro y sin relleno.
+- Los datos del titular salen siempre de `getTitular()`. Si falta alguno, se ve el marcador pendiente.
+
+Contenido mínimo de cada página:
+
+1. **Aviso legal** (LSSI, art. 10):
+   - titular, NIF, domicilio y email de contacto, más el registro mercantil si es empresa;
+   - objeto del sitio: calculadoras orientativas;
+   - el sitio no es oficial de la DGT, la AEAT ni ninguna administración, y el resultado no sustituye a la liquidación oficial;
+   - límite de responsabilidad por el uso de los cálculos;
+   - propiedad intelectual;
+   - enlaces a terceros;
+   - legislación aplicable: española.
+2. **Privacidad** (RGPD, art. 13):
+   - responsable del tratamiento (titular);
+   - la web no tiene formularios ni cuentas, y las calculadoras funcionan en el navegador sin enviar los datos introducidos;
+   - el contacto por email se trata para responder, con base en el interés legítimo o la solicitud del interesado;
+   - registros técnicos del servidor del proveedor de alojamiento (seguridad, interés legítimo);
+   - publicidad de Google AdSense (Google Ireland Ltd.) solo con consentimiento;
+   - transferencias internacionales a Google con cláusulas contractuales tipo y el Marco de Privacidad de Datos UE-EE. UU.;
+   - plazos de conservación;
+   - derechos ARSOPL y cómo ejercerlos (email del titular);
+   - reclamación ante la AEPD (aepd.es).
+3. **Cookies** (LSSI, art. 22.2, y Guía de cookies de la AEPD de 2023):
+   - qué son las cookies;
+   - tabla con las que usa la web:
+     - `ododex-theme` en `localStorage`: preferencia de tema, técnica, exenta de consentimiento, sin caducidad;
+     - cookies publicitarias y de medición de Google (AdSense), solo tras aceptar en el mensaje de consentimiento, con enlace a `https://policies.google.com/technologies/cookies?hl=es`;
+   - cómo retirar o cambiar el consentimiento: botón "Configurar cookies" del pie;
+   - cómo borrarlas desde el navegador.
+
+**AdSense y CMP:**
+
+- `components/AdSenseScript.tsx`, un componente de servidor:
+  - Solo renderiza algo si `process.env.NEXT_PUBLIC_ADSENSE_CLIENT` cumple `/^ca-pub-\d{16}$/`.
+  - En ese caso renderiza un `<Script async strategy="afterInteractive" crossOrigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=<id>">` de `next/script`.
+  - El mensaje de consentimiento (TCF v2.2) lo configura el titular en AdSense → Privacidad y mensajes y lo sirve ese mismo script. No se añade otra CMP.
+  - No se colocan bloques de anuncio en este encargo.
+- `components/ConsentSettingsButton.tsx`, un componente de cliente:
+  - Botón "Configurar cookies".
+  - Al pulsarlo ejecuta `window.googlefc.callbackQueue.push(window.googlefc.showRevocationMessage)`, inicializando `window.googlefc ??= {}` y `callbackQueue ??= []`, como indica Google.
+  - Se renderiza solo cuando AdSense está configurado; el `Footer` recibe esa condición.
+- Se documenta `NEXT_PUBLIC_ADSENSE_CLIENT` en el fichero `.env*` de ejemplo y en el README. Vacía por defecto, sin AdSense.
+
+**`Footer`:** fila de enlaces "Aviso legal · Privacidad · Cookies" con `next/link`, más el botón de configurar cookies si procede.
+
+**Criterio de aceptación:**
+
+- `tests/legal.test.ts` cubre:
+  - `getTitular` con el fichero real;
+  - `camposPendientes`, para persona física y para empresa;
+  - `valorOPendiente`;
+  - el marcado de las tres páginas con `renderToStaticMarkup`: contienen el nombre del titular o el marcador, "AEPD" en privacidad y `ododex-theme` en cookies.
+- `AdSenseScript` no renderiza nada sin la variable o con un valor inválido, y renderiza el script con un `ca-pub-` de 16 dígitos de prueba.
+- `npm test` y `npx tsc --noEmit` pasan.
+
 ## 3. Orden de implementación
 
 Todo es un único encargo de interfaz, en este orden:

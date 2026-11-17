@@ -1,5 +1,5 @@
 import React from 'react';
-import { SITE_NAME } from '@/lib/site';
+import { assetPath, SITE_NAME } from '@/lib/site';
 
 const LOGO_WIDTH = 198;
 const LOGO_HEIGHT = 48;
@@ -15,7 +15,7 @@ export function BrandLogo() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="brand-logo brand-logo-light"
-        src="/brand/ododex-logo-light.svg"
+        src={assetPath('/brand/ododex-logo-light.svg')}
         alt={SITE_NAME}
         width={LOGO_WIDTH}
         height={LOGO_HEIGHT}
@@ -24,7 +24,7 @@ export function BrandLogo() {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         className="brand-logo brand-logo-dark"
-        src="/brand/ododex-logo-dark.svg"
+        src={assetPath('/brand/ododex-logo-dark.svg')}
         alt={SITE_NAME}
         width={LOGO_WIDTH}
         height={LOGO_HEIGHT}

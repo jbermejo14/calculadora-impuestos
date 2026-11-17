@@ -4,19 +4,28 @@ export const SITE_NAME = 'Ododex';
 /** Etiqueta de la sección que aparece junto al logo en la cabecera. */
 export const SECTION_NAME = 'Impuestos de vehículos';
 
-/**
- * Helper para obtener la URL canónica absoluta del sitio
- */
+/** Ruta bajo la que se publica la web dentro de ododex.com. Sin barra final. */
+export const BASE_PATH = '/es/impuestos';
+
+const DEFAULT_SITE_URL = 'http://localhost:3000';
+
+/** Origen del sitio, sin ruta ni barra final. Variable NEXT_PUBLIC_SITE_URL; por defecto http://localhost:3000. */
 export function getSiteUrl(): string {
-  const url = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const url = process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL;
   return url.replace(/\/+$/, '');
 }
 
-/**
- * Genera una URL absoluta a partir de una ruta
- */
+function siteRoutePart(path: string): string {
+  if (path === '' || path === '/') return '';
+  return path.startsWith('/') ? path : `/${path}`;
+}
+
+/** URL absoluta de una ruta de la web: origen + BASE_PATH + ruta. absoluteUrl('/') → 'https://ododex.com/es/impuestos'. */
 export function absoluteUrl(path: string): string {
-  const base = getSiteUrl();
-  const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  return `${base}${cleanPath}`;
+  return `${getSiteUrl()}${BASE_PATH}${siteRoutePart(path)}`;
+}
+
+/** Ruta de un fichero de public/ con la ruta base, para <img>, <a> sin next/link y scripts: assetPath('/brand/x.svg') → '/es/impuestos/brand/x.svg'. */
+export function assetPath(path: string): string {
+  return `${BASE_PATH}${siteRoutePart(path)}`;
 }

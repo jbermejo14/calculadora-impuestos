@@ -2,8 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import { getComunidadesList } from '@/lib/itp';
 import { SITE_NAME } from '@/lib/site';
+import { ConsentSettingsButton } from '@/components/ConsentSettingsButton';
 
-export function Footer() {
+export interface FooterProps {
+  /** Muestra el botón para cambiar el consentimiento; solo si AdSense está configurado. */
+  mostrarConsentimiento?: boolean;
+}
+
+export function Footer({ mostrarConsentimiento = false }: FooterProps) {
   const comunidades = getComunidadesList(2026);
 
   return (
@@ -15,6 +21,12 @@ export function Footer() {
         <p className="footer-subtext">
           Valores fiscales del ejercicio 2026 verificados contra el BOE y las normas autonómicas (cada resultado indica la fecha de verificación y la fuente, y marca como pendiente cualquier dato sin verificar), basados en la Ley 38/1992 de Impuestos Especiales, la Orden HAC/1501/2025 de precios medios de venta y coeficientes de depreciación del BOE, las tasas de la DGT y las leyes autonómicas de tributos cedidos. El resultado es orientativo y no sustituye a la liquidación oficial. Sitio independiente: no es una web oficial de la DGT, de la AEAT ni de ninguna administración tributaria.
         </p>
+        <nav aria-label="Información legal" className="footer-legal">
+          <Link href="/aviso-legal">Aviso legal</Link>
+          <Link href="/privacidad">Privacidad</Link>
+          <Link href="/cookies">Cookies</Link>
+          {mostrarConsentimiento && <ConsentSettingsButton />}
+        </nav>
         <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-muted mt-2">
           <span>Comunidades Autónomas:</span>
           {comunidades.map(com => (

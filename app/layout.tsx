@@ -3,7 +3,8 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { getSiteUrl, SITE_NAME } from '@/lib/site';
+import { AdSenseScript, getAdSenseClient } from '@/components/AdSenseScript';
+import { absoluteUrl, getSiteUrl, SITE_NAME } from '@/lib/site';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -40,10 +41,10 @@ const THEME_SCRIPT = `
   })();
 `;
 
-const siteUrl = getSiteUrl();
+const homeUrl = absoluteUrl('/');
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP DGT',
     template: `%s | ${SITE_NAME}`
@@ -67,12 +68,12 @@ export const metadata: Metadata = {
     follow: true
   },
   alternates: {
-    canonical: siteUrl
+    canonical: homeUrl
   },
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: siteUrl,
+    url: homeUrl,
     siteName: SITE_NAME,
     title: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP',
     description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT (datos verificados contra el BOE; resultado orientativo, sin valor oficial).'
@@ -96,7 +97,8 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
-        <Footer />
+        <Footer mostrarConsentimiento={getAdSenseClient() !== null} />
+        <AdSenseScript />
       </body>
     </html>
   );

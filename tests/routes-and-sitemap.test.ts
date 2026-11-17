@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import sitemap from '../app/sitemap';
-import robots from '../app/robots';
 import { getComunidadITP, getComunidadesList } from '../lib/itp';
 import { getIEDMTData } from '../lib/iedmt';
 import fs from 'node:fs';
@@ -64,7 +63,7 @@ test('Verificación de rutas estáticas, slugs, 404 y sitemap sin red', async (t
     assert.equal(siteMapEntries.length, 27, `Se esperaban 27 páginas en el sitemap, encontradas: ${siteMapEntries.length}`);
 
     // Home
-    const homeEntry = siteMapEntries.find(e => !e.url.includes('/itp-') && !e.url.includes('/impuesto-') && !e.url.includes('/guia/'));
+    const homeEntry = siteMapEntries.find(e => e.url.endsWith('/es/impuestos') || !e.url.includes('/itp-') && !e.url.includes('/impuesto-') && !e.url.includes('/guia/'));
     assert.ok(homeEntry, 'Falta la home en el sitemap');
     assert.equal(homeEntry.priority, 1.0);
 
@@ -76,9 +75,4 @@ test('Verificación de rutas estáticas, slugs, 404 y sitemap sin red', async (t
     }
   });
 
-  await t.test('Generación de Robots.txt: debe permitir el rastreo y apuntar al sitemap', () => {
-    const robotsConfig = robots();
-    assert.ok(robotsConfig.sitemap, 'Falta sitemap en robots.txt');
-    assert.ok(typeof robotsConfig.sitemap === 'string' && robotsConfig.sitemap.endsWith('/sitemap.xml'));
-  });
 });

@@ -57,12 +57,23 @@ cp .env.example .env.local
 
 | Variable | Descripción | Valor por defecto |
 | :--- | :--- | :--- |
-| `NEXT_PUBLIC_SITE_URL` | URL base absoluta del sitio para canonical, sitemap.xml, robots.txt y Open Graph | `http://localhost:3000` |
+| `NEXT_PUBLIC_SITE_URL` | Origen del sitio (sin ruta ni barra final) para canonical, sitemap.xml y Open Graph | `http://localhost:3000` |
+| `NEXT_PUBLIC_ADSENSE_CLIENT` | Identificador de AdSense (`ca-pub-` y 16 dígitos). Vacío: sin anuncios ni botón de cookies | vacío |
 
 Ejemplo en producción:
 ```env
-NEXT_PUBLIC_SITE_URL=https://calculadoraimpuestosvehiculos.es
+NEXT_PUBLIC_SITE_URL=https://ododex.com
 ```
+
+## Publicación en ododex.com
+
+- **Ruta base:** la web se sirve bajo `/es/impuestos` (`BASE_PATH` en `lib/site.ts`, aplicado como `basePath` en `next.config.ts`). En local, `http://localhost:3000/es/impuestos`.
+- **`NEXT_PUBLIC_SITE_URL`:** solo el origen, `https://ododex.com`. Las URLs absolutas (canonical, sitemap, migas) añaden la ruta base solas.
+- **`NEXT_PUBLIC_ADSENSE_CLIENT`:** `ca-pub-` y 16 dígitos. Si está vacía o es inválida no se carga AdSense ni se muestra el botón "Configurar cookies". El mensaje de consentimiento (TCF v2.2) se configura en AdSense, en Privacidad y mensajes.
+- **`config/titular.json`:** datos del titular (`tipo`, `nombre`, `nif`, `domicilio`, `email` y, si es empresa, `registroMercantil`). Los campos vacíos aparecen como `[pendiente: campo]` en las páginas legales. Hay que rellenarlo antes de publicar.
+- **`robots.txt` y `ads.txt`:** solo valen en la raíz del dominio, que no sirve esta web. Deben existir en la raíz de `ododex.com`:
+  - `https://ododex.com/robots.txt` con la línea `Sitemap: https://ododex.com/es/impuestos/sitemap.xml`.
+  - `https://ododex.com/ads.txt` con la línea `google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0` (sustituye las X por los 16 dígitos del editor).
 
 ---
 
@@ -78,7 +89,7 @@ npm test
 1. **Integridad de Fuentes y Datos (`tests/data-sources.test.ts`):** Falla si falta algún archivo fiscal del año en curso, si falta la URL de la fuente en algún dato, si no se especifica la norma legal, si el estado de verificación no es válido o si un dato verificado no lleva fecha ISO (los pendientes deben llevar `null`). `tests/verification.test.ts` cubre el texto "Verificado el {fecha}".
 2. **Impuesto de Matriculación (`tests/iedmt.test.ts`):** Comprueba cada tramo de $CO_2$ en Península (0 %, 4,75 %, 9,75 %, 14,75 %), Canarias (0 %, 3,75 %, 8,75 %, 13,75 %), Ceuta y Melilla (0 %), bonificación del 50 % por Familia Numerosa, exención por Minusvalía y exención para vehículos comerciales.
 3. **ITP y Depreciación BOE (`tests/itp.test.ts`):** Comprueba el ITP de las 17 comunidades autónomas y de Ceuta y Melilla con al menos un caso real, las fronteras exactas de los 13 tramos de depreciación del Anexo IV del BOE, compraventa profesional (no sujeta a ITP), ciclomotores exentos, vehículos históricos, exención de coches de más de 10 años en Cataluña y Navarra, y bonificación etiqueta CERO emisiones.
-4. **Rutas Estáticas y SEO (`tests/routes-and-sitemap.test.ts`):** Valida todos los slugs de comunidades, territorios y guías, respuesta 404 para slugs inválidos, y la generación íntegra del sitemap (27 páginas canónicas) y robots.txt.
+4. **Rutas Estáticas y SEO (`tests/routes-and-sitemap.test.ts`):** Valida todos los slugs de comunidades, territorios y guías, respuesta 404 para slugs inválidos, y la generación íntegra del sitemap (27 páginas canónicas).
 
 ---
 
@@ -127,7 +138,6 @@ calculadora-impuestos/
 │   ├── layout.tsx                        # Layout raíz con fuentes y tema oscuro/claro
 │   ├── not-found.tsx                     # Página 404 personalizada
 │   ├── page.tsx                          # Home: calculadoras matriculación e ITP
-│   ├── robots.ts                         # Generación dinámica de robots.txt
 │   ├── sitemap.ts                        # Generación dinámica de sitemap.xml
 │   ├── guia/[tema]/page.tsx              # 4 páginas estáticas de guías
 │   ├── impuesto-matriculacion/[territorio]/page.tsx  # 3 páginas por territorio
