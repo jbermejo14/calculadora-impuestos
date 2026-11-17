@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import guias2026 from '@/data/2026/guias.json';
-import { absoluteUrl } from '@/lib/site';
+import { absoluteUrl, SITE_NAME } from '@/lib/site';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { VerificationNotice } from '@/components/VerificationNotice';
 import { getDepreciacionData } from '@/lib/itp';
@@ -26,11 +26,11 @@ export async function generateMetadata({
 
   if (!guia) {
     return {
-      title: 'Guía no encontrada | AutoTax'
+      title: 'Guía no encontrada'
     };
   }
 
-  const title = `${guia.titulo} 2026 | AutoTax`;
+  const title = `${guia.titulo} 2026`;
   const description = guia.descripcion;
   const canonical = absoluteUrl(`/guia/${guia.slug}`);
 
@@ -46,7 +46,7 @@ export async function generateMetadata({
       url: canonical,
       type: 'article',
       locale: 'es_ES',
-      siteName: 'AutoTax'
+      siteName: SITE_NAME
     }
   };
 }
@@ -78,19 +78,19 @@ export default async function GuiaTemaPage({
       />
 
       <div className="mb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 text-orange-500 text-xs font-bold uppercase tracking-wider mb-2">
-          Normativa Vigente 2026
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft text-accent text-xs font-bold uppercase tracking-wider mb-2">
+          Ejercicio 2026: pendiente de revisión
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           {guia.titulo}
         </h1>
-        <p className="text-sm md:text-base text-slate-400">
+        <p className="text-sm md:text-base text-muted">
           {guia.descripcion}
         </p>
       </div>
 
       <div className="card mb-8">
-        <div className="prose prose-invert max-w-none text-sm text-slate-300 leading-relaxed mb-6">
+        <div className="max-w-none text-sm text-fg leading-relaxed mb-6">
           <p className="text-base">{guia.contenido.resumen}</p>
         </div>
 
@@ -108,9 +108,9 @@ export default async function GuiaTemaPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {guia.contenido.tramosGeneral.map((tr: any) => (
+                  {guia.contenido.tramosGeneral.map((tr: any, index: number, tramos: any[]) => (
                     <tr key={tr.epigrafe}>
-                      <td><span className={`tag ${tr.destacado ? 'tag-green' : ''}`}>{tr.epigrafe}</span></td>
+                      <td><span className={`tag ${index === 0 ? 'tag-green' : index === tramos.length - 1 ? 'tag-red' : ''}`}>{tr.epigrafe}</span></td>
                       <td>{tr.rango}</td>
                       <td className="bold orange">{tr.tipo}</td>
                     </tr>
@@ -128,7 +128,7 @@ export default async function GuiaTemaPage({
               ))}
             </ul>
 
-            <div className="pt-4 border-t border-zinc-800">
+            <div className="pt-4 border-t border-line">
               <Link href="/#matriculacion" className="btn btn-secondary">
                 Ir a la Calculadora de Matriculación →
               </Link>
@@ -139,7 +139,7 @@ export default async function GuiaTemaPage({
         {slug === 'depreciacion-boe' && (
           <div>
             <h2 className="text-lg font-bold mb-2">Escala de Porcentajes de Depreciación por Antigüedad (Anexo IV)</h2>
-            <p className="text-xs text-slate-400 mb-4">{guia.contenido.reglaHacienda}</p>
+            <p className="text-xs text-muted mb-4">{guia.contenido.reglaHacienda}</p>
 
             <div className="table-responsive mb-6">
               <table className="guide-table">
@@ -153,16 +153,16 @@ export default async function GuiaTemaPage({
                 <tbody>
                   {depreciacionData.tramos.map(tr => (
                     <tr key={tr.etiqueta}>
-                      <td className="font-medium text-slate-200">{tr.etiqueta}</td>
+                      <td className="font-medium text-fg">{tr.etiqueta}</td>
                       <td className="bold orange">{tr.porcentaje} %</td>
-                      <td className="font-mono text-slate-300">{tr.coeficiente.toFixed(2)}</td>
+                      <td className="font-mono text-fg">{tr.coeficiente.toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800">
+            <div className="pt-4 border-t border-line">
               <Link href="/#transferencia" className="btn btn-secondary">
                 Calcular valor venal de tu coche →
               </Link>
@@ -194,7 +194,7 @@ export default async function GuiaTemaPage({
               </table>
             </div>
 
-            <div className="pt-4 border-t border-zinc-800">
+            <div className="pt-4 border-t border-line">
               <Link href="/#transferencia" className="btn btn-secondary">
                 Calcular transferencia con tasas DGT →
               </Link>
@@ -211,7 +211,7 @@ export default async function GuiaTemaPage({
               ))}
             </ul>
 
-            <div className="pt-4 border-t border-zinc-800">
+            <div className="pt-4 border-t border-line">
               <Link href="/#transferencia" className="btn btn-secondary">
                 Ir a la Calculadora de Transferencia →
               </Link>
@@ -238,10 +238,10 @@ export default async function GuiaTemaPage({
             <Link
               key={otra.slug}
               href={`/guia/${otra.slug}`}
-              className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 hover:border-orange-500 hover:text-white transition-colors text-sm"
+              className="p-3 rounded-lg bg-elevated border border-line hover:border-accent hover:text-accent transition-colors text-sm"
             >
               <div className="font-bold mb-1">{otra.titulo}</div>
-              <div className="text-xs text-slate-400 line-clamp-2">{otra.descripcion}</div>
+              <div className="text-xs text-muted line-clamp-2">{otra.descripcion}</div>
             </Link>
           ))}
         </div>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getComunidadesList, getComunidadITP, calcularITP } from '@/lib/itp';
-import { absoluteUrl } from '@/lib/site';
+import { absoluteUrl, SITE_NAME } from '@/lib/site';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraTransferencia } from '@/components/CalculadoraTransferencia';
 import { VerificationNotice } from '@/components/VerificationNotice';
@@ -40,12 +40,12 @@ export async function generateMetadata({
         url: canonical,
         type: 'website',
         locale: 'es_ES',
-        siteName: 'AutoTax'
+        siteName: SITE_NAME
       }
     };
   } catch {
     return {
-      title: 'Comunidad no encontrada | AutoTax'
+      title: 'Comunidad no encontrada'
     };
   }
 }
@@ -108,13 +108,13 @@ export default async function ComunidadPage({
 
       {/* Cabecera de la Comunidad */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 text-orange-500 text-xs font-bold uppercase tracking-wider mb-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft text-accent text-xs font-bold uppercase tracking-wider mb-2">
           Ejercicio Fiscal 2026: pendiente de revisión
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           ITP de Vehículos Usados en {com.nombre} (2026)
         </h1>
-        <p className="text-sm md:text-base text-slate-400">
+        <p className="text-sm md:text-base text-muted">
           Guía tributaria, tipos impositivos aplicables, modelos de autoliquidación (<strong>{com.modelo}</strong>) y calculadora interactiva para la compraventa de coches de segunda mano entre particulares.
         </p>
       </div>
@@ -122,25 +122,25 @@ export default async function ComunidadPage({
       {/* Ficha Resumen de la Comunidad */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="card py-4 px-5">
-          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tipo General ITP</div>
-          <div className="text-3xl font-extrabold text-orange-500 font-mono mt-1">
+          <div className="text-xs text-muted font-semibold uppercase tracking-wider">Tipo General ITP</div>
+          <div className="text-3xl font-extrabold text-accent font-mono mt-1">
             {(com.tipoEfectivo ?? com.tipoGeneral).toFixed(1).replace('.', ',')} %
           </div>
-          <div className="text-xs text-slate-500 mt-1">
+          <div className="text-xs text-muted mt-1">
             {com.tipoEfectivo ? `(Tipo general 4 % con bonif. 50 % = efectivo ${com.tipoEfectivo} %)` : 'Sobre la base imponible mayor'}
           </div>
         </div>
 
         <div className="card py-4 px-5">
-          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Modelo de Tributación</div>
-          <div className="text-lg font-bold text-slate-200 mt-1">{com.modelo}</div>
-          <div className="text-xs text-slate-500 mt-1">{com.organismo}</div>
+          <div className="text-xs text-muted font-semibold uppercase tracking-wider">Modelo de Tributación</div>
+          <div className="text-lg font-bold text-fg mt-1">{com.modelo}</div>
+          <div className="text-xs text-muted mt-1">{com.organismo}</div>
         </div>
 
         <div className="card py-4 px-5">
-          <div className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Tasa DGT de Transferencia</div>
-          <div className="text-2xl font-extrabold text-slate-200 font-mono mt-1">55,70 €</div>
-          <div className="text-xs text-slate-500 mt-1">Tasa 1.5 DGT general (ciclomotores: 27,85 €)</div>
+          <div className="text-xs text-muted font-semibold uppercase tracking-wider">Tasa DGT de Transferencia</div>
+          <div className="text-2xl font-extrabold text-fg font-mono mt-1">55,70 €</div>
+          <div className="text-xs text-muted mt-1">Tasa 1.5 DGT general (ciclomotores: 27,85 €)</div>
         </div>
       </div>
 
@@ -185,49 +185,49 @@ export default async function ComunidadPage({
       {/* Ejemplos Reales Calculados */}
       <div className="card mb-8">
         <h2 className="text-lg font-bold mb-2">Ejemplos Reales de Transferencia en {com.nombre}</h2>
-        <p className="text-sm text-slate-400 mb-6">
+        <p className="text-sm text-muted mb-6">
           Cálculos con cifras reales aplicando el valor fiscal según la Orden Ministerial del BOE, los coeficientes de depreciación y las tasas de Tráfico:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Ejemplo 1 */}
-          <div className="p-4 rounded-lg bg-zinc-900/60 border border-zinc-800">
-            <div className="text-xs font-bold text-orange-500 uppercase tracking-wider mb-1">Ejemplo 1: Turismo de 5 años</div>
+          <div className="p-4 rounded-lg bg-elevated border border-line">
+            <div className="text-xs font-bold text-accent uppercase tracking-wider mb-1">Ejemplo 1: Turismo de 5 años</div>
             <div className="text-sm font-semibold mb-3">Seat León / VW Golf (Valor nuevo BOE: 22.000 €)</div>
-            <ul className="text-xs text-slate-300 space-y-1.5 mb-4">
+            <ul className="text-xs text-fg space-y-1.5 mb-4">
               <li>&bull; Precio pactado en contrato: <strong>10.000,00 €</strong></li>
               <li>&bull; Coeficiente antigüedad (5 años): <strong>47 %</strong></li>
               <li>&bull; Valor fiscal mínimo BOE: <strong>{formatEUR(ejemplo5.valorFiscalDepreciado)}</strong></li>
               <li>&bull; Base imponible aplicada: <strong>{formatEUR(ejemplo5.baseLiquidable)}</strong> (la mayor)</li>
-              <li>&bull; Cuota ITP ({ejemplo5.tipoPorcentajeAplicado} %): <strong className="text-orange-500">{formatEUR(ejemplo5.cuotaITP)}</strong></li>
+              <li>&bull; Cuota ITP ({ejemplo5.tipoPorcentajeAplicado} %): <strong className="text-accent">{formatEUR(ejemplo5.cuotaITP)}</strong></li>
               <li>&bull; Tasa DGT 1.5 cambio de nombre: <strong>55,70 €</strong></li>
             </ul>
-            <div className="pt-3 border-t border-zinc-800 flex justify-between items-center text-sm">
+            <div className="pt-3 border-t border-line flex justify-between items-center text-sm">
               <span className="font-bold">Total Gastos Transferencia:</span>
-              <span className="font-mono font-extrabold text-orange-500">{formatEUR(ejemplo5.totalGastosTransferencia)}</span>
+              <span className="font-mono font-extrabold text-accent">{formatEUR(ejemplo5.totalGastosTransferencia)}</span>
             </div>
           </div>
 
           {/* Ejemplo 2 */}
-          <div className="p-4 rounded-lg bg-zinc-900/60 border border-zinc-800">
-            <div className="text-xs font-bold text-orange-500 uppercase tracking-wider mb-1">Ejemplo 2: Turismo de 10 años</div>
+          <div className="p-4 rounded-lg bg-elevated border border-line">
+            <div className="text-xs font-bold text-accent uppercase tracking-wider mb-1">Ejemplo 2: Turismo de 10 años</div>
             <div className="text-sm font-semibold mb-3">Renault Clio / Ford Fiesta (Valor nuevo BOE: 14.000 €)</div>
-            <ul className="text-xs text-slate-300 space-y-1.5 mb-4">
+            <ul className="text-xs text-fg space-y-1.5 mb-4">
               <li>&bull; Precio pactado en contrato: <strong>2.500,00 €</strong></li>
               <li>&bull; Coeficiente antigüedad (10 años): <strong>19 %</strong></li>
               <li>&bull; Valor fiscal mínimo BOE: <strong>{formatEUR(ejemplo10.valorFiscalDepreciado)}</strong></li>
               <li>&bull; Base imponible aplicada: <strong>{formatEUR(ejemplo10.baseLiquidable)}</strong></li>
               <li>
                 &bull; Cuota ITP ({ejemplo10.tipoPorcentajeAplicado} %):{' '}
-                <strong className="text-orange-500">
+                <strong className="text-accent">
                   {ejemplo10.esExentoOcuotaCero ? '0,00 € (Exento)' : formatEUR(ejemplo10.cuotaITP)}
                 </strong>
               </li>
               <li>&bull; Tasa DGT 1.5 cambio de nombre: <strong>55,70 €</strong></li>
             </ul>
-            <div className="pt-3 border-t border-zinc-800 flex justify-between items-center text-sm">
+            <div className="pt-3 border-t border-line flex justify-between items-center text-sm">
               <span className="font-bold">Total Gastos Transferencia:</span>
-              <span className="font-mono font-extrabold text-orange-500">{formatEUR(ejemplo10.totalGastosTransferencia)}</span>
+              <span className="font-mono font-extrabold text-accent">{formatEUR(ejemplo10.totalGastosTransferencia)}</span>
             </div>
           </div>
         </div>
@@ -242,7 +242,7 @@ export default async function ComunidadPage({
       {/* Enlaces a Otras Comunidades Autónomas (Interlinking) */}
       <div className="card">
         <h2 className="text-lg font-bold mb-2">Calculadora de ITP en otras Comunidades Autónomas</h2>
-        <p className="text-xs text-slate-400 mb-4">
+        <p className="text-xs text-muted mb-4">
           Selecciona otra comunidad autónoma para ver sus tipos impositivos vigentes, exenciones y tasas de autoliquidación:
         </p>
 

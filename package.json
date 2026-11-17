@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --import tsx --test \"tests/**/*.test.ts\""
+    "test": "node --import tsx --test \"tests/**/*.test.ts\" \"tests/**/*.test.tsx\""
   },
   "dependencies": {
     "next": "16.4.6",
@@ -15,7 +15,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
-    "@tailwindcss/turbopack": "4.3.3",
+    "@tailwindcss/postcss": "4.3.3",
     "@types/node": "20.17.19",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
@@ -24,5 +24,8 @@
     "tailwindcss": "4.3.3",
     "tsx": "4.19.3",
     "typescript": "5.7.3"
+  },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-wasm32-wasi": "4.3.3"
   }
 }

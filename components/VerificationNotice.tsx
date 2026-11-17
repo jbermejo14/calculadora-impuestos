@@ -21,7 +21,20 @@ export function VerificationNotice({
   return (
     <div className={`verification-box ${className}`}>
       <div className="flex items-start gap-2">
-        <span className="text-base leading-none">🛡️</span>
+        <svg
+          className="verification-icon"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
         <div>
           <p>
             <strong>{estadoTexto}</strong> Fuente:{' '}

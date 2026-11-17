@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getIEDMTData } from '@/lib/iedmt';
-import { absoluteUrl } from '@/lib/site';
+import { absoluteUrl, SITE_NAME } from '@/lib/site';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraMatriculacion } from '@/components/CalculadoraMatriculacion';
 import { VerificationNotice } from '@/components/VerificationNotice';
@@ -27,7 +27,7 @@ export async function generateMetadata({
 
   if (!terr) {
     return {
-      title: 'Territorio no encontrado | AutoTax'
+      title: 'Territorio no encontrado'
     };
   }
 
@@ -47,7 +47,7 @@ export async function generateMetadata({
       url: canonical,
       type: 'website',
       locale: 'es_ES',
-      siteName: 'AutoTax'
+      siteName: SITE_NAME
     }
   };
 }
@@ -79,13 +79,13 @@ export default async function TerritorioMatriculacionPage({
 
       {/* Cabecera */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/15 text-orange-500 text-xs font-bold uppercase tracking-wider mb-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft text-accent text-xs font-bold uppercase tracking-wider mb-2">
           Ejercicio Fiscal 2026: pendiente de revisión
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           Impuesto de Matriculación en {terr.nombre} (2026)
         </h1>
-        <p className="text-sm md:text-base text-slate-400">
+        <p className="text-sm md:text-base text-muted">
           Tipos impositivos del Modelo 576 de la AEAT según emisiones de CO₂ (ciclo WLTP) para {terr.nombre}.
         </p>
       </div>
@@ -138,7 +138,7 @@ export default async function TerritorioMatriculacionPage({
       {/* Otros Territorios */}
       <div className="card">
         <h2 className="text-lg font-bold mb-2">Otros Territorios Fiscales</h2>
-        <p className="text-xs text-slate-400 mb-4">
+        <p className="text-xs text-muted mb-4">
           Consulta la escala de gravamen en los demás regímenes tributarios de España:
         </p>
         <div className="flex flex-wrap gap-3">
@@ -146,7 +146,7 @@ export default async function TerritorioMatriculacionPage({
             <Link
               key={otro.slug}
               href={`/impuesto-matriculacion/${otro.slug}`}
-              className="px-4 py-2 rounded-lg bg-zinc-800 border border-zinc-700 hover:border-orange-500 hover:text-white transition-colors text-sm font-semibold"
+              className="px-4 py-2 rounded-lg bg-elevated border border-line hover:border-accent hover:text-accent transition-colors text-sm font-semibold"
             >
               {otro.nombre} →
             </Link>

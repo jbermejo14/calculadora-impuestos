@@ -1,85 +1,73 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
+import { BrandLogo } from './BrandLogo';
+import { SECTION_NAME } from '@/lib/site';
+
+const THEME_STORAGE_KEY = 'ododex-theme';
+const THEME_ICON_SIZE = 18;
+const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
+
+type Theme = 'dark' | 'light';
+
+/** Tema activo: el atributo de <html> que fija layout.tsx o, si falta, la preferencia del sistema. */
+function currentTheme(root: HTMLElement): Theme {
+  const attribute = root.getAttribute('data-theme');
+  if (attribute === 'dark' || attribute === 'light') return attribute;
+  const prefersDark = typeof window.matchMedia === 'function' && window.matchMedia(DARK_SCHEME_QUERY).matches;
+  return prefersDark ? 'dark' : 'light';
+}
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const next: Theme = currentTheme(root) === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, next);
+  } catch {
+    // Sin localStorage (modo privado, cookies bloqueadas) el tema solo dura la visita.
+  }
+}
 
 export function Header() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-
-  useEffect(() => {
-    // Leer preferencia guardada o tema actual del html
-    const saved = localStorage.getItem('autotax_theme') as 'dark' | 'light' | null;
-    const current = (document.documentElement.getAttribute('data-theme') as 'dark' | 'light') || saved || 'dark';
-    setTheme(current);
-    document.documentElement.setAttribute('data-theme', current);
-  }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(nextTheme);
-    document.documentElement.setAttribute('data-theme', nextTheme);
-    localStorage.setItem('autotax_theme', nextTheme);
-  };
-
   return (
     <header className="site-header">
       <div className="header-container">
         <Link href="/" className="brand">
-          <div className="brand-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
-              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11.2 2 11.7 2 12.2V16c0 .6.4 1 1 1h2" />
-              <circle cx="7" cy="17" r="2" />
-              <path d="M9 17h6" />
-              <circle cx="17" cy="17" r="2" />
-            </svg>
-          </div>
-          <div>
-            <span className="brand-title">
-              Auto<span>Tax</span>
-            </span>
-            <p className="brand-subtitle">Impuestos de Matriculación &amp; Transferencia DGT</p>
-          </div>
+          <BrandLogo />
+          <span className="brand-separator" aria-hidden="true" />
+          <span className="brand-section">{SECTION_NAME}</span>
         </Link>
 
         <div className="header-actions">
-          {/* Botón Modo Oscuro / Modo Claro */}
+          {/* El icono y el texto de cada tema se alternan por CSS según [data-theme]. */}
           <button
             id="themeToggleBtn"
             className="theme-toggle-btn"
             type="button"
             onClick={toggleTheme}
-            aria-label="Cambiar tema de color"
-            title="Alternar Modo Oscuro / Modo Claro"
           >
-            {theme === 'dark' ? (
-              <>
-                <span className="text-amber-400 inline-flex items-center">
-                  {/* Sun icon */}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                  </svg>
-                </span>
-                <span>Modo Claro</span>
-              </>
-            ) : (
-              <>
-                <span className="text-slate-600 inline-flex items-center">
-                  {/* Moon icon */}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                  </svg>
-                </span>
-                <span>Modo Oscuro</span>
-              </>
-            )}
+            <span className="theme-when-dark" title="Modo claro">
+              <svg viewBox="0 0 24 24" width={THEME_ICON_SIZE} height={THEME_ICON_SIZE} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <span className="theme-toggle-text sr-only md:not-sr-only">Modo claro</span>
+            </span>
+            <span className="theme-when-light" title="Modo oscuro">
+              <svg viewBox="0 0 24 24" width={THEME_ICON_SIZE} height={THEME_ICON_SIZE} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+              <span className="theme-toggle-text sr-only md:not-sr-only">Modo oscuro</span>
+            </span>
           </button>
         </div>
       </div>

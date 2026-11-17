@@ -1,3 +1,9 @@
+/** Nombre de la marca de la red de webs. */
+export const SITE_NAME = 'Ododex';
+
+/** Etiqueta de la sección que aparece junto al logo en la cabecera. */
+export const SECTION_NAME = 'Impuestos de vehículos';
+
 /**
  * Helper para obtener la URL canónica absoluta del sitio
  */

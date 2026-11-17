@@ -1,4 +1,4 @@
-# AutoTax: Calculadora de Impuestos de Vehículos (2026)
+# Ododex: Calculadora de Impuestos de Vehículos (2026)
 
 Aplicación web desarrollada con **Next.js (App Router)** para calcular de forma orientativa los tributos exigidos en España al registrar o transferir un vehículo:
 
@@ -32,6 +32,18 @@ La aplicación estará disponible en `http://localhost:3000`.
 npm run build
 ```
 Genera de forma estática (SSG) todas las 27 páginas indexables del portal.
+
+---
+
+## Estilos y marca
+
+La marca es **Ododex** (`SITE_NAME` y `SECTION_NAME` en `lib/site.ts`; logos en `public/brand/`). Los colores son variables CSS por tema en `app/globals.css` (atributo `data-theme` de `<html>`, guardado en `localStorage['ododex-theme']`) y se exponen a Tailwind como `bg-surface`, `text-muted`, `border-line`, `text-accent`...
+
+Tailwind 4 se compila por PostCSS (`postcss.config.mjs`) para que funcione igual con webpack y con Turbopack. En Windows, el escáner WASM de Tailwind no lee rutas `C:\`, así que `postcss-tailwind-windows.cjs` extrae las clases de `app`, `components` y `lib` con Node y las declara con `@source inline(...)` (en otras plataformas no hace nada). Consecuencias:
+
+- Instalar con `npm install --force`, porque `@tailwindcss/oxide-wasm32-wasi` declara `cpu: wasm32`.
+- `npm run build` usa `next build --webpack`.
+- Si el CSS generado no cambia tras editar `app/globals.css`, es la caché de webpack: modifica el fichero y recompila.
 
 ---
 
