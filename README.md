@@ -39,7 +39,7 @@ La aplicación estará disponible en `http://localhost:3000/es/impuestos` (la ra
 ```bash
 npm run build
 ```
-Genera de forma estática (SSG) todas las páginas: las 27 indexables del sitemap y las 3 legales, que no se indexan.
+Exporta el sitio como ficheros estáticos en `out/` (`output: 'export'` en `next.config.ts`): las 27 páginas indexables del sitemap y las 3 legales, que no se indexan. Con exportación estática no existe `npm run start`: para ver el resultado como en producción, usa `npm run preview` en `../ododex-sitio`.
 
 ---
 
@@ -79,9 +79,7 @@ NEXT_PUBLIC_SITE_URL=https://ododex.com
 - **`NEXT_PUBLIC_SITE_URL`:** solo el origen, `https://ododex.com`. Las URLs absolutas (canonical, sitemap, migas) añaden la ruta base solas.
 - **`NEXT_PUBLIC_ADSENSE_CLIENT`:** `ca-pub-` y 16 dígitos. Si está vacía o es inválida no se carga AdSense ni se muestra el botón "Configurar cookies". El mensaje de consentimiento (TCF v2.2) se configura en AdSense, en Privacidad y mensajes.
 - **`config/titular.json`:** datos del titular (`tipo`, `nombre`, `nif`, `domicilio`, `email` y, si es empresa, `registroMercantil`). No está en git porque contiene datos personales: se crea copiando `config/titular.example.json` y se rellena en cada máquina donde se compile la web. Si no existe, se usa la plantilla y los campos aparecen como `[pendiente: campo]` en las páginas legales. Hay que rellenarlo antes de publicar.
-- **`robots.txt` y `ads.txt`:** solo valen en la raíz del dominio, que no sirve esta web. Deben existir en la raíz de `ododex.com`:
-  - `https://ododex.com/robots.txt` con la línea `Sitemap: https://ododex.com/es/impuestos/sitemap.xml`.
-  - `https://ododex.com/ads.txt` con la línea `google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0` (sustituye las X por los 16 dígitos del editor).
+- **Despliegue:** el proyecto hermano `../ododex-sitio` compila esta web con las variables de producción, copia `out/` bajo `/es/impuestos` junto a las demás secciones y lo sube a Cloudflare Pages. También genera en la raíz de `ododex.com` el `robots.txt` (con `Sitemap: https://ododex.com/es/impuestos/sitemap.xml`) y el `ads.txt`, que solo valen en la raíz del dominio. Ver su README.
 
 ---
 
