@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     default: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP DGT',
     template: `%s | ${SITE_NAME}`
   },
-  description: 'Calcula online los impuestos de matriculación (IEDMT Modelo 576) y transferencia de vehículos usados (ITP Modelos 620/621) en España para 2026 con tasas DGT actualizadas.',
+  description: 'Calcula online los impuestos de matriculación (IEDMT Modelo 576) y transferencia de vehículos usados (ITP Modelos 620/621) en España para 2026 con tasas DGT actualizadas. Resultado orientativo: no sustituye a la liquidación oficial.',
   keywords: [
     'calculadora impuestos vehiculos',
     'impuesto matriculacion 2026',
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: SITE_NAME,
     title: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP',
-    description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT (datos pendientes de revisión).'
+    description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT (datos verificados contra el BOE; resultado orientativo, sin valor oficial).'
   }
 };
 

@@ -43,7 +43,7 @@ export function VerificationNotice({
             </a>.
           </p>
           <p className="verification-legal">
-            <strong>Aviso legal:</strong> La liquidación definitiva la realiza la administración tributaria de la comunidad autónoma correspondiente o la AEAT.
+            <strong>Aviso legal:</strong> La liquidación definitiva la realiza la administración tributaria de la comunidad autónoma correspondiente o la AEAT. Este resultado es orientativo y no sustituye a la liquidación oficial. Esta web es independiente: no es un sitio oficial de la DGT ni de Hacienda.
           </p>
         </div>
       </div>

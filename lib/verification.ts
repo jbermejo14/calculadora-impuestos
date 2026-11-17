@@ -25,3 +25,15 @@ export function textoVerificacion(dato: VerificacionDato, anio: number): string 
 export function etiquetaVerificacion(estado: EstadoVerificacion, anio: number): string {
   return estado === 'verificado' ? `Verificado ${anio}` : `Pendiente de revisión ${anio}`;
 }
+
+/**
+ * Aviso legal de un cálculo, construido a partir del estado real del dato:
+ * no afirma "pendiente" si está verificado ni "verificado" si no lo está.
+ * @param liquidador Organismo que realiza la liquidación oficial definitiva.
+ */
+export function avisoLegalVerificacion(dato: VerificacionDato, anio: number, liquidador: string): string {
+  const estado = textoVerificacion(dato, anio);
+  const verificado = estado.startsWith('Verificado');
+  const introduccion = verificado ? `${estado}. Cálculo orientativo.` : estado;
+  return `${introduccion} La liquidación oficial definitiva la realiza ${liquidador}.`;
+}

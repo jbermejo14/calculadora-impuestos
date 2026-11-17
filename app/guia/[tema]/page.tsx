@@ -7,8 +7,13 @@ import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { VerificationNotice } from '@/components/VerificationNotice';
 import { getDepreciacionData } from '@/lib/itp';
 import { getTasasDgtData } from '@/lib/fees';
+import { getIEDMTData } from '@/lib/iedmt';
+import { etiquetaVerificacion } from '@/lib/verification';
 
 export const dynamicParams = false;
+
+const TERRITORIO_GENERAL = 'peninsula-y-baleares';
+const TIPO_ALTO_MINIMO = 13;
 
 export async function generateStaticParams() {
   return Object.keys(guias2026.temas).map(slug => ({
@@ -66,6 +71,7 @@ export default async function GuiaTemaPage({
   const otrosTemas = Object.values(guias2026.temas).filter((g: any) => g.slug !== guia.slug) as any[];
   const depreciacionData = getDepreciacionData(2026);
   const tasasData = getTasasDgtData(2026);
+  const tramosIedmt = getIEDMTData(2026).territorios[TERRITORIO_GENERAL].tramos;
 
   return (
     <main className="main-wrapper">
@@ -79,7 +85,7 @@ export default async function GuiaTemaPage({
 
       <div className="mb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft text-accent text-xs font-bold uppercase tracking-wider mb-2">
-          Ejercicio 2026: pendiente de revisión
+          {etiquetaVerificacion(guia.estadoVerificacion, 2026)}
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           {guia.titulo}
@@ -97,7 +103,7 @@ export default async function GuiaTemaPage({
         {/* Contenido Específico según el Tema */}
         {slug === 'tramos-iedmt' && (
           <div>
-            <h2 className="text-lg font-bold mb-3">Tramos de Emisiones de CO₂ y Tipos Impositivos (Península e Islas Baleares)</h2>
+            <h2 className="text-lg font-bold mb-3">Epígrafes y Tipos Impositivos (Península e Islas Baleares)</h2>
             <div className="table-responsive mb-6">
               <table className="guide-table">
                 <thead>
@@ -108,11 +114,11 @@ export default async function GuiaTemaPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {guia.contenido.tramosGeneral.map((tr: any, index: number, tramos: any[]) => (
+                  {tramosIedmt.map(tr => (
                     <tr key={tr.epigrafe}>
-                      <td><span className={`tag ${index === 0 ? 'tag-green' : index === tramos.length - 1 ? 'tag-red' : ''}`}>{tr.epigrafe}</span></td>
-                      <td>{tr.rango}</td>
-                      <td className="bold orange">{tr.tipo}</td>
+                      <td><span className={`tag ${tr.tipoPorcentaje === 0 ? 'tag-green' : tr.tipoPorcentaje >= TIPO_ALTO_MINIMO ? 'tag-red' : ''}`}>Epígrafe {tr.epigrafe}</span></td>
+                      <td>{tr.descripcion}</td>
+                      <td className="bold orange">{tr.tipoPorcentaje.toFixed(2).replace('.', ',')} %</td>
                     </tr>
                   ))}
                 </tbody>
@@ -183,8 +189,8 @@ export default async function GuiaTemaPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.values(tasasData.tasas).map(tasa => (
-                    <tr key={tasa.codigo}>
+                  {Object.entries(tasasData.tasas).map(([clave, tasa]) => (
+                    <tr key={clave}>
                       <td><span className="tag">{tasa.codigo}</span></td>
                       <td>{tasa.concepto}</td>
                       <td className="bold orange">{tasa.importe.toFixed(2).replace('.', ',')} €</td>

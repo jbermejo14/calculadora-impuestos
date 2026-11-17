@@ -2,7 +2,8 @@
 
 import { etiquetaVerificacion } from '@/lib/verification';
 import React, { useState, useId } from 'react';
-import { calcularIEDMT } from '@/lib/iedmt';
+import { calcularIEDMT, getIEDMTData, territorioTieneIvaIEDMT, type TipoVehiculoIEDMT } from '@/lib/iedmt';
+import { getTasaMatriculacion } from '@/lib/fees';
 import { VerificationNotice } from './VerificationNotice';
 
 export interface CalculadoraMatriculacionProps {
@@ -10,6 +11,11 @@ export interface CalculadoraMatriculacionProps {
   initialBase?: number;
   initialCO2?: number;
 }
+
+const PLAZAS_POR_DEFECTO = 5;
+const TIPOS_SIN_FAMILIA_NUMEROSA: TipoVehiculoIEDMT[] = ['motocicleta', 'quad'];
+
+const ANIO_FISCAL = 2026;
 
 function formatEUR(val: number): string {
   return new Intl.NumberFormat('es-ES', {
@@ -28,7 +34,12 @@ export function CalculadoraMatriculacion({
   const [baseImponible, setBaseImponible] = useState<number>(initialBase);
   const [emisionesCO2, setEmisionesCO2] = useState<number>(initialCO2);
   const [territorio, setTerritorio] = useState<string>(initialTerritorio);
-  const [tipoVehiculo, setTipoVehiculo] = useState<'turismo' | 'motocicleta' | 'comercial' | 'autocaravana'>('turismo');
+  const [tipoVehiculo, setTipoVehiculo] = useState<TipoVehiculoIEDMT>('turismo');
+  const [plazas, setPlazas] = useState<number>(PLAZAS_POR_DEFECTO);
+  const [esMotorNoCombustion, setEsMotorNoCombustion] = useState<boolean>(false);
+  const [co2NoAcreditado, setCo2NoAcreditado] = useState<boolean>(false);
+  const [esMotoAltaPotencia, setEsMotoAltaPotencia] = useState<boolean>(false);
+  const [esN2N3Vivienda, setEsN2N3Vivienda] = useState<boolean>(false);
   const [esFamiliaNumerosa, setEsFamiliaNumerosa] = useState<boolean>(false);
   const [esMinusvalia, setEsMinusvalia] = useState<boolean>(false);
   const [incluirIva, setIncluirIva] = useState<boolean>(true);
@@ -38,18 +49,40 @@ export function CalculadoraMatriculacion({
   const co2InputId = useId();
   const terrSelectId = useId();
   const tipoSelectId = useId();
+  const plazasInputId = useId();
+
+  const datosIedmt = getIEDMTData(ANIO_FISCAL);
+  const territorios = Object.values(datosIedmt.territorios);
+  const tieneIva = territorioTieneIvaIEDMT(territorio);
+  const ivaPorcentaje = datosIedmt.iva.porcentaje;
+  const reduccionFamiliaNumerosa = datosIedmt.bonificaciones.familiaNumerosa.porcentajeReduccionBase;
+  const ivaTexto = ivaPorcentaje.toString().replace('.', ',');
 
   const resultado = calcularIEDMT({
-    anio: 2026,
+    anio: ANIO_FISCAL,
     baseImponible,
     emisionesCO2,
     territorio,
     tipoVehiculo,
     esFamiliaNumerosa,
+    plazas,
     esMinusvalia,
+    esMotorNoCombustion,
+    co2NoAcreditado,
+    esMotoAltaPotencia,
+    esN2N3Vivienda,
     incluirIva,
     incluirTasaDgt
   });
+
+  const permiteFamiliaNumerosa = !TIPOS_SIN_FAMILIA_NUMEROSA.includes(tipoVehiculo);
+
+  const handleTipoVehiculo = (nuevoTipo: TipoVehiculoIEDMT) => {
+    setTipoVehiculo(nuevoTipo);
+    if (TIPOS_SIN_FAMILIA_NUMEROSA.includes(nuevoTipo)) {
+      setEsFamiliaNumerosa(false);
+    }
+  };
 
   const handlePrint = () => {
     window.print();
@@ -61,6 +94,11 @@ export function CalculadoraMatriculacion({
     setTerritorio(initialTerritorio);
     setTipoVehiculo('turismo');
     setEsFamiliaNumerosa(false);
+    setPlazas(PLAZAS_POR_DEFECTO);
+    setEsMotorNoCombustion(false);
+    setCo2NoAcreditado(false);
+    setEsMotoAltaPotencia(false);
+    setEsN2N3Vivienda(false);
     setEsMinusvalia(false);
     setIncluirIva(true);
     setIncluirTasaDgt(true);
@@ -90,9 +128,9 @@ export function CalculadoraMatriculacion({
               value={territorio}
               onChange={e => setTerritorio(e.target.value)}
             >
-              <option value="peninsula-y-baleares">Península e Islas Baleares (Régimen General)</option>
-              <option value="canarias">Canarias (Tipos reducidos REF: 0 %, 3,75 %, 8,75 %, 13,75 %)</option>
-              <option value="ceuta-y-melilla">Ceuta y Melilla (Tipo 0 % en todos los epígrafes)</option>
+              {territorios.map(terr => (
+                <option key={terr.slug} value={terr.slug}>{terr.nombre}</option>
+              ))}
             </select>
           </div>
 
@@ -100,7 +138,7 @@ export function CalculadoraMatriculacion({
           <div className="form-group">
             <label htmlFor={baseInputId} className="form-label">
               Base Imponible (€)
-              <span className="tooltip-icon" title="Precio neto del coche sin IVA ni impuestos. Si compras a concesionario, suele ser el PVP sin el 21% de IVA.">ⓘ</span>
+              <span className="tooltip-icon" title="Precio neto del coche sin IVA ni impuestos. Si compras a concesionario, suele ser el PVP sin el IVA.">ⓘ</span>
             </label>
             <div className="input-addon-group">
               <input
@@ -186,13 +224,68 @@ export function CalculadoraMatriculacion({
               id={tipoSelectId}
               className="form-control"
               value={tipoVehiculo}
-              onChange={e => setTipoVehiculo(e.target.value as any)}
+              onChange={e => handleTipoVehiculo(e.target.value as TipoVehiculoIEDMT)}
             >
-              <option value="turismo">Turismo o Todoterreno común</option>
-              <option value="motocicleta">Motocicleta (&gt; 125cc o &gt; 11kW)</option>
-              <option value="comercial">Vehículo Mixto / Comercial afecto a actividad profesional (Exento)</option>
-              <option value="autocaravana">Autocaravana o Vehículo Camper</option>
+              <option value="turismo">Turismo / todoterreno</option>
+              <option value="motocicleta">Motocicleta</option>
+              <option value="autocaravana">Autocaravana / vehículo vivienda</option>
+              <option value="quad">Quad</option>
+              <option value="comercial">Furgoneta o comercial (N1) afecto a actividad económica</option>
             </select>
+          </div>
+
+          {/* Condiciones que cambian el epígrafe */}
+          <div className="form-group">
+            <label className="form-label">Condiciones del vehículo</label>
+            <div className="checkbox-group">
+              {tipoVehiculo !== 'quad' && tipoVehiculo !== 'comercial' && (
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={esMotorNoCombustion}
+                    onChange={e => setEsMotorNoCombustion(e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="chk-label">Un solo motor, no de combustión (eléctrico puro)</span>
+                </label>
+              )}
+
+              {tipoVehiculo !== 'quad' && tipoVehiculo !== 'comercial' && (
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={co2NoAcreditado}
+                    onChange={e => setCo2NoAcreditado(e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="chk-label">CO₂ no acreditado</span>
+                </label>
+              )}
+
+              {tipoVehiculo === 'motocicleta' && (
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={esMotoAltaPotencia}
+                    onChange={e => setEsMotoAltaPotencia(e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="chk-label">Potencia ≥ 74 kW y relación potencia/masa ≥ 0,66 kW/kg</span>
+                </label>
+              )}
+
+              {tipoVehiculo === 'autocaravana' && (
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={esN2N3Vivienda}
+                    onChange={e => setEsN2N3Vivienda(e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="chk-label">Categoría N2/N3 (camión vivienda)</span>
+                </label>
+              )}
+            </div>
           </div>
 
           {/* Bonificaciones */}
@@ -203,13 +296,29 @@ export function CalculadoraMatriculacion({
                 <input
                   type="checkbox"
                   checked={esFamiliaNumerosa}
+                  disabled={!permiteFamiliaNumerosa}
                   onChange={e => setEsFamiliaNumerosa(e.target.checked)}
                 />
                 <span className="checkmark"></span>
                 <span className="chk-label">
-                  <strong>Familia Numerosa</strong> (50 % de descuento en la base imponible)
+                  <strong>Familia Numerosa</strong> ({reduccionFamiliaNumerosa} % de descuento en la base imponible)
                 </span>
               </label>
+
+              {esFamiliaNumerosa && (
+                <div className="form-group">
+                  <label htmlFor={plazasInputId} className="form-label">Plazas homologadas (incluido conductor)</label>
+                  <input
+                    type="number"
+                    id={plazasInputId}
+                    className="form-control"
+                    value={plazas}
+                    min={1}
+                    step={1}
+                    onChange={e => setPlazas(parseInt(e.target.value, 10) || 0)}
+                  />
+                </div>
+              )}
 
               <label className="custom-checkbox">
                 <input
@@ -219,19 +328,20 @@ export function CalculadoraMatriculacion({
                 />
                 <span className="checkmark"></span>
                 <span className="chk-label">
-                  <strong>Movilidad Reducida / Minusvalía</strong> (100 % Exento)
+                  <strong>Movilidad Reducida / Minusvalía</strong> (exención)
                 </span>
               </label>
 
               <label className="custom-checkbox">
                 <input
                   type="checkbox"
-                  checked={incluirIva}
+                  checked={tieneIva && incluirIva}
+                  disabled={!tieneIva}
                   onChange={e => setIncluirIva(e.target.checked)}
                 />
                 <span className="checkmark"></span>
                 <span className="chk-label">
-                  Calcular también IVA general (21 %)
+                  {tieneIva ? `Calcular también IVA general (${ivaTexto} %)` : 'IVA no aplicable en este territorio (impuesto propio no incluido)'}
                 </span>
               </label>
 
@@ -243,7 +353,7 @@ export function CalculadoraMatriculacion({
                 />
                 <span className="checkmark"></span>
                 <span className="chk-label">
-                  Añadir Tasa DGT de Matriculación (99,77 €)
+                  Añadir Tasa DGT de Matriculación ({formatEUR(getTasaMatriculacion(ANIO_FISCAL).importe)})
                 </span>
               </label>
             </div>
@@ -284,7 +394,7 @@ export function CalculadoraMatriculacion({
           {resultado.cuotaIva > 0 && (
             <div className="breakdown-item">
               <div className="item-info">
-                <span className="item-title">IVA (21 %)</span>
+                <span className="item-title">IVA ({ivaTexto} %)</span>
                 <span className="item-detail">Sobre la base imponible original</span>
               </div>
               <span className="item-val">{formatEUR(resultado.cuotaIva)}</span>
@@ -311,6 +421,16 @@ export function CalculadoraMatriculacion({
             <span className="item-val">{formatEUR(resultado.baseImponibleOriginal)}</span>
           </div>
         </div>
+
+        {resultado.avisos.length > 0 && (
+          <ul className="guide-list">
+            {resultado.avisos.map(aviso => (
+              <li key={aviso}>{aviso}</li>
+            ))}
+          </ul>
+        )}
+
+        <p className="card-desc">{resultado.notaTipos}</p>
 
         {/* Verificación Obligatoria */}
         <VerificationNotice

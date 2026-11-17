@@ -1,9 +1,9 @@
 {
   "anio": 2026,
-  "norma": "Orden HAC/1484/2024, de 26 de diciembre, por la que se aprueban los precios medios de venta aplicables en la gestión del ITP y AJD, ISD e IEDMT (Anexo IV)",
-  "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-  "estadoVerificacion": "pendiente",
-  "fechaVerificacion": null,
+  "norma": "Orden HAC/1501/2025, de 17 de diciembre, por la que se aprueban los precios medios de venta aplicables en la gestión del ITP y AJD, ISD e IEDMT (Anexo IV)",
+  "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+  "estadoVerificacion": "verificado",
+  "fechaVerificacion": "2026-11-17",
   "tramos": [
     {
       "minAnios": 0,
@@ -11,10 +11,10 @@
       "etiqueta": "Hasta 1 año",
       "coeficiente": 1.00,
       "porcentaje": 100,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 1.0001,
@@ -22,10 +22,10 @@
       "etiqueta": "Más de 1 año y hasta 2 años",
       "coeficiente": 0.84,
       "porcentaje": 84,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 2.0001,
@@ -33,10 +33,10 @@
       "etiqueta": "Más de 2 años y hasta 3 años",
       "coeficiente": 0.67,
       "porcentaje": 67,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 3.0001,
@@ -44,10 +44,10 @@
       "etiqueta": "Más de 3 años y hasta 4 años",
       "coeficiente": 0.56,
       "porcentaje": 56,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 4.0001,
@@ -55,10 +55,10 @@
       "etiqueta": "Más de 4 años y hasta 5 años",
       "coeficiente": 0.47,
       "porcentaje": 47,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 5.0001,
@@ -66,10 +66,10 @@
       "etiqueta": "Más de 5 años y hasta 6 años",
       "coeficiente": 0.39,
       "porcentaje": 39,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 6.0001,
@@ -77,10 +77,10 @@
       "etiqueta": "Más de 6 años y hasta 7 años",
       "coeficiente": 0.34,
       "porcentaje": 34,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 7.0001,
@@ -88,10 +88,10 @@
       "etiqueta": "Más de 7 años y hasta 8 años",
       "coeficiente": 0.28,
       "porcentaje": 28,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 8.0001,
@@ -99,10 +99,10 @@
       "etiqueta": "Más de 8 años y hasta 9 años",
       "coeficiente": 0.24,
       "porcentaje": 24,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 9.0001,
@@ -110,10 +110,10 @@
       "etiqueta": "Más de 9 años y hasta 10 años",
       "coeficiente": 0.19,
       "porcentaje": 19,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 10.0001,
@@ -121,10 +121,10 @@
       "etiqueta": "Más de 10 años y hasta 11 años",
       "coeficiente": 0.17,
       "porcentaje": 17,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 11.0001,
@@ -132,10 +132,10 @@
       "etiqueta": "Más de 11 años y hasta 12 años",
       "coeficiente": 0.13,
       "porcentaje": 13,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     {
       "minAnios": 12.0001,
@@ -143,10 +143,10 @@
       "etiqueta": "Más de 12 años",
       "coeficiente": 0.10,
       "porcentaje": 10,
-      "norma": "Orden HAC/1484/2024, Anexo IV",
-      "fuente": "https://www.boe.es/buscar/doc.php?id=BOE-A-2024-27387",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Orden HAC/1501/2025, Anexo IV",
+      "fuente": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26357",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     }
   ]
 }

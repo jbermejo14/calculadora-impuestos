@@ -1,54 +1,54 @@
 {
   "anio": 2026,
-  "norma": "Real Decreto Legislativo 6/2015, de 30 de octubre, por el que se aprueba el texto refundido de la Ley sobre Tráfico, Circulación de Vehículos a Motor y Seguridad Vial (Anexo de Tasas DGT)",
-  "fuente": "https://sede.dgt.gob.es/es/tasas/",
-  "estadoVerificacion": "pendiente",
-  "fechaVerificacion": null,
+  "norma": "Ley 16/1979, de 2 de octubre, sobre tasas de la Jefatura Central de Tráfico, artículo 6 (importes actualizados cada año conforme a la Ley de Presupuestos Generales del Estado; catálogo oficial de tasas de la DGT)",
+  "fuente": "https://sedeclave.dgt.gob.es/WEB_Tasas/jsp/tasas/download/catalogoPrecioTasas.pdf",
+  "estadoVerificacion": "verificado",
+  "fechaVerificacion": "2026-11-17",
   "tasas": {
     "transferenciaOrdinaria": {
       "codigo": "1.5",
       "concepto": "Cambio de titularidad de vehículos de motor (turismos, motocicletas, furgonetas, camiones)",
       "importe": 55.70,
-      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.5",
-      "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Ley 16/1979, art. 6, y catálogo oficial de tasas de la DGT: tasa 1.5",
+      "fuente": "https://sedeclave.dgt.gob.es/WEB_Tasas/jsp/tasas/download/catalogoPrecioTasas.pdf",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     "transferenciaCiclomotor": {
       "codigo": "1.2",
       "concepto": "Cambio de titularidad de ciclomotores",
       "importe": 27.85,
-      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.2",
-      "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Ley 16/1979, art. 6, y catálogo oficial de tasas de la DGT: tasa 1.2",
+      "fuente": "https://sedeclave.dgt.gob.es/WEB_Tasas/jsp/tasas/download/catalogoPrecioTasas.pdf",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     "matriculacionOrdinaria": {
       "codigo": "1.1",
       "concepto": "Matriculación ordinaria de vehículos a motor",
       "importe": 99.77,
-      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.1",
-      "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Ley 16/1979, art. 6, y catálogo oficial de tasas de la DGT: tasa 1.1",
+      "fuente": "https://sedeclave.dgt.gob.es/WEB_Tasas/jsp/tasas/download/catalogoPrecioTasas.pdf",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     "matriculacionCiclomotor": {
       "codigo": "1.2",
       "concepto": "Matriculación de ciclomotores",
       "importe": 27.85,
-      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 1.2",
-      "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Ley 16/1979, art. 6, y catálogo oficial de tasas de la DGT: tasa 1.2",
+      "fuente": "https://sedeclave.dgt.gob.es/WEB_Tasas/jsp/tasas/download/catalogoPrecioTasas.pdf",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     },
     "informeVehiculo": {
       "codigo": "4.1",
-      "concepto": "Informe de vehículo detallado (cargas, precintos, titularidad e ITV)",
+      "concepto": "Anotaciones en expedientes, suministro de datos, certificaciones e informe de vehículos",
       "importe": 8.67,
-      "norma": "Ley de Tasas de la Jefatura Central de Tráfico, Tasa 4.1",
-      "fuente": "https://sede.dgt.gob.es/es/tasas/",
-      "estadoVerificacion": "pendiente",
-      "fechaVerificacion": null
+      "norma": "Ley 16/1979, art. 6, y catálogo oficial de tasas de la DGT: tasa 4.1",
+      "fuente": "https://sedeclave.dgt.gob.es/WEB_Tasas/jsp/tasas/download/catalogoPrecioTasas.pdf",
+      "estadoVerificacion": "verificado",
+      "fechaVerificacion": "2026-11-17"
     }
   }
 }

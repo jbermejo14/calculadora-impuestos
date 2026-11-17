@@ -1,13 +1,27 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getComunidadesList, getComunidadITP, calcularITP } from '@/lib/itp';
+import {
+  getComunidadesList,
+  getComunidadITP,
+  calcularITP,
+  getTipoEfectivoITP,
+  etiquetaCuotaCeroITP,
+  type ComunidadITPData
+} from '@/lib/itp';
+import { getTasaTransferencia } from '@/lib/fees';
+import { etiquetaVerificacion } from '@/lib/verification';
 import { absoluteUrl, SITE_NAME } from '@/lib/site';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraTransferencia } from '@/components/CalculadoraTransferencia';
 import { VerificationNotice } from '@/components/VerificationNotice';
 
 export const dynamicParams = false;
+
+const ANIO_FISCAL = 2026;
+const DECIMALES_TIPO = 1;
+const EJEMPLO_5_ANIOS = { precioContrato: 10000, valorNuevoBoe: 22000, antiguedadAnios: 5 };
+const EJEMPLO_10_ANIOS = { precioContrato: 2500, valorNuevoBoe: 14000, antiguedadAnios: 10 };
 
 export async function generateStaticParams() {
   const comunidades = getComunidadesList(2026);
@@ -50,6 +64,16 @@ export async function generateMetadata({
   }
 }
 
+function formatTipo(tipo: number): string {
+  return tipo.toFixed(DECIMALES_TIPO).replace('.', ',');
+}
+
+/** Texto bajo el tipo general: explica la bonificación de residencia (Ceuta y Melilla) si existe. */
+function textoTipoEfectivo(com: ComunidadITPData): string {
+  if (com.bonificacionResidencia === undefined) return 'Sobre la base imponible mayor';
+  return `(Tipo general ${formatTipo(com.tipoGeneral)} % con bonificación de residencia del ${formatTipo(com.bonificacionResidencia)} % = efectivo ${formatTipo(getTipoEfectivoITP(com))} %)`;
+}
+
 function formatEUR(val: number): string {
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
@@ -78,23 +102,21 @@ export default async function ComunidadPage({
 
   // Ejemplo 1: Coche de 5 años (Valor nuevo BOE 22.000 €, depreciación 47 % -> 10.340 €)
   const ejemplo5 = calcularITP({
-    anio: 2026,
+    anio: ANIO_FISCAL,
     comunidadSlug: com.slug,
-    precioContrato: 10000,
-    valorNuevoBoe: 22000,
-    antiguedadAnios: 5,
+    ...EJEMPLO_5_ANIOS,
     incluirTasaDgt: true
   });
 
   // Ejemplo 2: Coche de 10 años (Valor nuevo BOE 14.000 €, depreciación 19 % -> 2.660 €)
   const ejemplo10 = calcularITP({
-    anio: 2026,
+    anio: ANIO_FISCAL,
     comunidadSlug: com.slug,
-    precioContrato: 2500,
-    valorNuevoBoe: 14000,
-    antiguedadAnios: 10,
+    ...EJEMPLO_10_ANIOS,
     incluirTasaDgt: true
   });
+  const tasaOrdinaria = getTasaTransferencia(ANIO_FISCAL);
+  const tasaCiclomotor = getTasaTransferencia(ANIO_FISCAL, true);
 
   return (
     <main className="main-wrapper">
@@ -109,7 +131,7 @@ export default async function ComunidadPage({
       {/* Cabecera de la Comunidad */}
       <div className="mb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft text-accent text-xs font-bold uppercase tracking-wider mb-2">
-          Ejercicio Fiscal 2026: pendiente de revisión
+          {etiquetaVerificacion(com.estadoVerificacion, ANIO_FISCAL)}
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           ITP de Vehículos Usados en {com.nombre} (2026)
@@ -124,10 +146,10 @@ export default async function ComunidadPage({
         <div className="card py-4 px-5">
           <div className="text-xs text-muted font-semibold uppercase tracking-wider">Tipo General ITP</div>
           <div className="text-3xl font-extrabold text-accent font-mono mt-1">
-            {(com.tipoEfectivo ?? com.tipoGeneral).toFixed(1).replace('.', ',')} %
+            {formatTipo(getTipoEfectivoITP(com))} %
           </div>
           <div className="text-xs text-muted mt-1">
-            {com.tipoEfectivo ? `(Tipo general 4 % con bonif. 50 % = efectivo ${com.tipoEfectivo} %)` : 'Sobre la base imponible mayor'}
+            {textoTipoEfectivo(com)}
           </div>
         </div>
 
@@ -139,8 +161,10 @@ export default async function ComunidadPage({
 
         <div className="card py-4 px-5">
           <div className="text-xs text-muted font-semibold uppercase tracking-wider">Tasa DGT de Transferencia</div>
-          <div className="text-2xl font-extrabold text-fg font-mono mt-1">55,70 €</div>
-          <div className="text-xs text-muted mt-1">Tasa 1.5 DGT general (ciclomotores: 27,85 €)</div>
+          <div className="text-2xl font-extrabold text-fg font-mono mt-1">{formatEUR(tasaOrdinaria.importe)}</div>
+          <div className="text-xs text-muted mt-1">
+            Tasa {tasaOrdinaria.codigo} DGT general (ciclomotores, tasa {tasaCiclomotor.codigo}: {formatEUR(tasaCiclomotor.importe)})
+          </div>
         </div>
       </div>
 
@@ -156,12 +180,12 @@ export default async function ComunidadPage({
           </li>
           {com.exencionDiezAnios && (
             <li>
-              <strong>Exención para coches con más de 10 años:</strong> {com.exencionDiezAnios.descripcion}
+              <strong>{com.exencionDiezAnios.clasificacion === 'exencion' ? 'Exención por antigüedad' : 'Sin obligación de autoliquidar por antigüedad'}:</strong> {com.exencionDiezAnios.descripcion}
             </li>
           )}
           {com.exencionCiclomotores && (
             <li>
-              <strong>Ciclomotores:</strong> Exención total del impuesto en esta comunidad autónoma (cuota ITP = 0 €).
+              <strong>Ciclomotores:</strong> {com.exencionCiclomotoresDescripcion ?? `Cuota de ITP de 0 € en ${com.nombre}.`}
             </li>
           )}
           {com.cuotasFijasAntiguedad && (
@@ -193,14 +217,14 @@ export default async function ComunidadPage({
           {/* Ejemplo 1 */}
           <div className="p-4 rounded-lg bg-elevated border border-line">
             <div className="text-xs font-bold text-accent uppercase tracking-wider mb-1">Ejemplo 1: Turismo de 5 años</div>
-            <div className="text-sm font-semibold mb-3">Seat León / VW Golf (Valor nuevo BOE: 22.000 €)</div>
+            <div className="text-sm font-semibold mb-3">Seat León / VW Golf (Valor nuevo BOE: {formatEUR(EJEMPLO_5_ANIOS.valorNuevoBoe)})</div>
             <ul className="text-xs text-fg space-y-1.5 mb-4">
-              <li>&bull; Precio pactado en contrato: <strong>10.000,00 €</strong></li>
-              <li>&bull; Coeficiente antigüedad (5 años): <strong>47 %</strong></li>
+              <li>&bull; Precio pactado en contrato: <strong>{formatEUR(EJEMPLO_5_ANIOS.precioContrato)}</strong></li>
+              <li>&bull; Coeficiente antigüedad ({EJEMPLO_5_ANIOS.antiguedadAnios} años): <strong>{ejemplo5.porcentajeDepreciacion} %</strong></li>
               <li>&bull; Valor fiscal mínimo BOE: <strong>{formatEUR(ejemplo5.valorFiscalDepreciado)}</strong></li>
               <li>&bull; Base imponible aplicada: <strong>{formatEUR(ejemplo5.baseLiquidable)}</strong> (la mayor)</li>
               <li>&bull; Cuota ITP ({ejemplo5.tipoPorcentajeAplicado} %): <strong className="text-accent">{formatEUR(ejemplo5.cuotaITP)}</strong></li>
-              <li>&bull; Tasa DGT 1.5 cambio de nombre: <strong>55,70 €</strong></li>
+              <li>&bull; Tasa DGT {ejemplo5.tasaDgtCodigo} cambio de nombre: <strong>{formatEUR(ejemplo5.tasaDgtImporte)}</strong></li>
             </ul>
             <div className="pt-3 border-t border-line flex justify-between items-center text-sm">
               <span className="font-bold">Total Gastos Transferencia:</span>
@@ -211,19 +235,19 @@ export default async function ComunidadPage({
           {/* Ejemplo 2 */}
           <div className="p-4 rounded-lg bg-elevated border border-line">
             <div className="text-xs font-bold text-accent uppercase tracking-wider mb-1">Ejemplo 2: Turismo de 10 años</div>
-            <div className="text-sm font-semibold mb-3">Renault Clio / Ford Fiesta (Valor nuevo BOE: 14.000 €)</div>
+            <div className="text-sm font-semibold mb-3">Renault Clio / Ford Fiesta (Valor nuevo BOE: {formatEUR(EJEMPLO_10_ANIOS.valorNuevoBoe)})</div>
             <ul className="text-xs text-fg space-y-1.5 mb-4">
-              <li>&bull; Precio pactado en contrato: <strong>2.500,00 €</strong></li>
-              <li>&bull; Coeficiente antigüedad (10 años): <strong>19 %</strong></li>
+              <li>&bull; Precio pactado en contrato: <strong>{formatEUR(EJEMPLO_10_ANIOS.precioContrato)}</strong></li>
+              <li>&bull; Coeficiente antigüedad ({EJEMPLO_10_ANIOS.antiguedadAnios} años): <strong>{ejemplo10.porcentajeDepreciacion} %</strong></li>
               <li>&bull; Valor fiscal mínimo BOE: <strong>{formatEUR(ejemplo10.valorFiscalDepreciado)}</strong></li>
               <li>&bull; Base imponible aplicada: <strong>{formatEUR(ejemplo10.baseLiquidable)}</strong></li>
               <li>
                 &bull; Cuota ITP ({ejemplo10.tipoPorcentajeAplicado} %):{' '}
                 <strong className="text-accent">
-                  {ejemplo10.esExentoOcuotaCero ? '0,00 € (Exento)' : formatEUR(ejemplo10.cuotaITP)}
+                  {ejemplo10.clasificacionCuotaCero ? `${formatEUR(ejemplo10.cuotaITP)} (${etiquetaCuotaCeroITP(ejemplo10.clasificacionCuotaCero)})` : formatEUR(ejemplo10.cuotaITP)}
                 </strong>
               </li>
-              <li>&bull; Tasa DGT 1.5 cambio de nombre: <strong>55,70 €</strong></li>
+              <li>&bull; Tasa DGT {ejemplo10.tasaDgtCodigo} cambio de nombre: <strong>{formatEUR(ejemplo10.tasaDgtImporte)}</strong></li>
             </ul>
             <div className="pt-3 border-t border-line flex justify-between items-center text-sm">
               <span className="font-bold">Total Gastos Transferencia:</span>
@@ -250,7 +274,7 @@ export default async function ComunidadPage({
           {otrasComunidades.map(otra => (
             <Link key={otra.slug} href={`/itp-coche-segunda-mano/${otra.slug}`} className="community-pill">
               <span className="com-name">{otra.nombre}</span>
-              <span className="com-rate">{(otra.tipoEfectivo ?? otra.tipoGeneral).toFixed(1).replace('.', ',')} % ITP</span>
+              <span className="com-rate">{formatTipo(getTipoEfectivoITP(otra))} % ITP</span>
             </Link>
           ))}
         </div>

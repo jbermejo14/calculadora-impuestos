@@ -6,6 +6,7 @@ import { absoluteUrl, SITE_NAME } from '@/lib/site';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraMatriculacion } from '@/components/CalculadoraMatriculacion';
 import { VerificationNotice } from '@/components/VerificationNotice';
+import { etiquetaVerificacion } from '@/lib/verification';
 
 export const dynamicParams = false;
 
@@ -80,7 +81,7 @@ export default async function TerritorioMatriculacionPage({
       {/* Cabecera */}
       <div className="mb-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft text-accent text-xs font-bold uppercase tracking-wider mb-2">
-          Ejercicio Fiscal 2026: pendiente de revisión
+          {etiquetaVerificacion(terr.estadoVerificacion, 2026)}
         </div>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           Impuesto de Matriculación en {terr.nombre} (2026)
@@ -113,7 +114,7 @@ export default async function TerritorioMatriculacionPage({
                   </td>
                   <td>{tramo.descripcion}</td>
                   <td className="bold orange">{tramo.tipoPorcentaje.toFixed(2).replace('.', ',')} %</td>
-                  <td>{tramo.tipoPorcentaje === 0 ? 'Exento' : 'Sujeto a gravamen'}</td>
+                  <td>{tramo.tipoPorcentaje === 0 ? 'Tipo del 0 %' : 'Sujeto a gravamen'}</td>
                 </tr>
               ))}
             </tbody>

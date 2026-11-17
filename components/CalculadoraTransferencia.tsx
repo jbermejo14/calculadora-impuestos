@@ -2,7 +2,16 @@
 
 import { etiquetaVerificacion } from '@/lib/verification';
 import React, { useState, useId } from 'react';
-import { calcularITP, getComunidadesList } from '@/lib/itp';
+import {
+  calcularITP,
+  etiquetaCuotaCeroITP,
+  getCoeficienteDepreciacion,
+  getComunidadesList,
+  getComunidadITP,
+  HONORARIOS_GESTORIA_ITP
+} from '@/lib/itp';
+import { getTasaTransferencia } from '@/lib/fees';
+import type { DistintivoITP, TipoVehiculoITP } from '@/lib/itp';
 import { VerificationNotice } from './VerificationNotice';
 
 export interface CalculadoraTransferenciaProps {
@@ -11,6 +20,32 @@ export interface CalculadoraTransferenciaProps {
   initialValorNuevoBoe?: number;
   initialAntiguedad?: number;
 }
+
+const CILINDRADA_POR_DEFECTO = 1400;
+const POTENCIA_FISCAL_POR_DEFECTO = 11;
+const SLUGS_CIUDADES_AUTONOMAS = ['ceuta', 'melilla'];
+const SLUG_EXTREMADURA = 'extremadura';
+
+const ANIO_FISCAL = 2026;
+
+/** Antigüedades representativas de cada tramo; el porcentaje de depreciación sale de los datos. */
+const OPCIONES_ANTIGUEDAD = [
+  { valor: 0.5, texto: 'Hasta 1 año' },
+  { valor: 1.5, texto: 'Más de 1 año y hasta 2' },
+  { valor: 2.5, texto: 'Más de 2 años y hasta 3' },
+  { valor: 3.5, texto: 'Más de 3 años y hasta 4' },
+  { valor: 4.5, texto: 'Más de 4 años y hasta 5' },
+  { valor: 5.5, texto: 'Más de 5 años y hasta 6' },
+  { valor: 6.5, texto: 'Más de 6 años y hasta 7' },
+  { valor: 7.5, texto: 'Más de 7 años y hasta 8' },
+  { valor: 8.5, texto: 'Más de 8 años y hasta 9' },
+  { valor: 9.5, texto: 'Más de 9 años y menos de 10' },
+  { valor: 10, texto: 'Exactamente 10 años' },
+  { valor: 10.5, texto: 'Más de 10 años y hasta 11' },
+  { valor: 11.5, texto: 'Más de 11 años y hasta 12' },
+  { valor: 13, texto: 'Más de 12 años y menos de 15' },
+  { valor: 15, texto: '15 años o más' }
+];
 
 function formatEUR(val: number): string {
   return new Intl.NumberFormat('es-ES', {
@@ -21,13 +56,20 @@ function formatEUR(val: number): string {
   }).format(val);
 }
 
+/** Texto de la bonificación de residencia de la comunidad, tomado de los datos; vacío si no la tiene. */
+function textoBonificacion(comunidadSlug: string): string {
+  const com = getComunidadITP(ANIO_FISCAL, comunidadSlug);
+  if (com.bonificacionResidencia === undefined) return '';
+  return `bonificación del ${com.bonificacionResidencia} %; si no, tributa al ${com.tipoGeneral} %`;
+}
+
 export function CalculadoraTransferencia({
   initialComunidad = 'madrid',
   initialPrecioContrato = 8500,
   initialValorNuevoBoe = 22000,
   initialAntiguedad = 5.5
 }: CalculadoraTransferenciaProps) {
-  const comunidades = getComunidadesList(2026);
+  const comunidades = getComunidadesList(ANIO_FISCAL);
 
   const [comunidadSlug, setComunidadSlug] = useState<string>(initialComunidad);
   const [precioContrato, setPrecioContrato] = useState<number>(initialPrecioContrato);
@@ -36,10 +78,13 @@ export function CalculadoraTransferencia({
 
   // Casos especiales
   const [esProfesional, setEsProfesional] = useState<boolean>(false);
-  const [esCiclomotor, setEsCiclomotor] = useState<boolean>(false);
+  const [tipoVehiculo, setTipoVehiculo] = useState<TipoVehiculoITP>('turismo');
   const [esHistorico, setEsHistorico] = useState<boolean>(false);
-  const [esCeroEmisiones, setEsCeroEmisiones] = useState<boolean>(false);
-  const [potenciaFiscalCVF, setPotenciaFiscalCVF] = useState<number>(11);
+  const [distintivo, setDistintivo] = useState<DistintivoITP>('ninguno');
+  const [potenciaFiscalCVF, setPotenciaFiscalCVF] = useState<number>(POTENCIA_FISCAL_POR_DEFECTO);
+  const [cilindradaCC, setCilindradaCC] = useState<number>(CILINDRADA_POR_DEFECTO);
+  const [esResidenteCiudadAutonoma, setEsResidenteCiudadAutonoma] = useState<boolean>(true);
+  const [esComercialConActividad, setEsComercialConActividad] = useState<boolean>(false);
   const [incluirTasaDgt, setIncluirTasaDgt] = useState<boolean>(true);
   const [incluirGestoria, setIncluirGestoria] = useState<boolean>(false);
 
@@ -47,18 +92,28 @@ export function CalculadoraTransferencia({
   const precioInputId = useId();
   const boeInputId = useId();
   const antigSelectId = useId();
+  const tipoVehiculoSelectId = useId();
+  const distintivoSelectId = useId();
+  const cilindradaInputId = useId();
+
+  const esCiudadAutonoma = SLUGS_CIUDADES_AUTONOMAS.includes(comunidadSlug);
+  const esCiclomotor = tipoVehiculo === 'ciclomotor';
+  const textoBonificacionResidencia = textoBonificacion(comunidadSlug);
 
   const resultado = calcularITP({
-    anio: 2026,
+    anio: ANIO_FISCAL,
     comunidadSlug,
     precioContrato,
     valorNuevoBoe,
     antiguedadAnios,
     esCompraventaProfesional: esProfesional,
-    esCiclomotor,
+    tipoVehiculo,
     esHistorico,
-    esCeroEmisiones,
+    distintivo,
     potenciaFiscalCVF,
+    cilindradaCC,
+    esResidenteCiudadAutonoma,
+    esComercialConActividad,
     incluirTasaDgt,
     incluirGestoria
   });
@@ -73,10 +128,13 @@ export function CalculadoraTransferencia({
     setValorNuevoBoe(22000);
     setAntiguedadAnios(5.5);
     setEsProfesional(false);
-    setEsCiclomotor(false);
+    setTipoVehiculo('turismo');
     setEsHistorico(false);
-    setEsCeroEmisiones(false);
-    setPotenciaFiscalCVF(11);
+    setDistintivo('ninguno');
+    setPotenciaFiscalCVF(POTENCIA_FISCAL_POR_DEFECTO);
+    setCilindradaCC(CILINDRADA_POR_DEFECTO);
+    setEsResidenteCiudadAutonoma(true);
+    setEsComercialConActividad(false);
     setIncluirTasaDgt(true);
     setIncluirGestoria(false);
   };
@@ -165,21 +223,67 @@ export function CalculadoraTransferencia({
                 value={antiguedadAnios.toString()}
                 onChange={e => setAntiguedadAnios(parseFloat(e.target.value))}
               >
-                <option value="0.5">Hasta 1 año (100 % valor)</option>
-                <option value="1.5">Más de 1 año y hasta 2 (84 %)</option>
-                <option value="2.5">Más de 2 años y hasta 3 (67 %)</option>
-                <option value="3.5">Más de 3 años y hasta 4 (56 %)</option>
-                <option value="4.5">Más de 4 años y hasta 5 (47 %)</option>
-                <option value="5.5">Más de 5 años y hasta 6 (39 %)</option>
-                <option value="6.5">Más de 6 años y hasta 7 (34 %)</option>
-                <option value="7.5">Más de 7 años y hasta 8 (28 %)</option>
-                <option value="8.5">Más de 8 años y hasta 9 (24 %)</option>
-                <option value="9.5">Más de 9 años y hasta 10 (19 %)</option>
-                <option value="10.5">Más de 10 años y hasta 11 (17 %)</option>
-                <option value="11.5">Más de 11 años y hasta 12 (13 %)</option>
-                <option value="13.0">Más de 12 años (10 % valor residual)</option>
+                {OPCIONES_ANTIGUEDAD.map(opcion => (
+                  <option key={opcion.valor} value={opcion.valor}>
+                    {opcion.texto} ({getCoeficienteDepreciacion(ANIO_FISCAL, opcion.valor).porcentaje} %)
+                  </option>
+                ))}
               </select>
             </div>
+          </div>
+
+          {/* Tipo de vehículo y cilindrada */}
+          <div className="form-row-2">
+            <div className="form-group">
+              <label htmlFor={tipoVehiculoSelectId} className="form-label">
+                Tipo de vehículo
+                <span className="tooltip-icon" title="Las cuotas fijas por antigüedad y las exenciones dependen del tipo de vehículo.">ⓘ</span>
+              </label>
+              <select
+                id={tipoVehiculoSelectId}
+                className="form-control"
+                value={tipoVehiculo}
+                onChange={e => setTipoVehiculo(e.target.value as TipoVehiculoITP)}
+              >
+                <option value="turismo">Turismo / todoterreno</option>
+                <option value="motocicleta">Motocicleta</option>
+                <option value="ciclomotor">Ciclomotor (tasa DGT reducida)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor={cilindradaInputId} className="form-label">
+                Cilindrada (cc)
+                <span className="tooltip-icon" title="Cilindrada de la ficha técnica. Determina las cuotas fijas por antigüedad y el tipo incrementado en algunas comunidades.">ⓘ</span>
+              </label>
+              <input
+                type="number"
+                id={cilindradaInputId}
+                className="form-control"
+                value={cilindradaCC}
+                min={0}
+                step={100}
+                onChange={e => setCilindradaCC(parseFloat(e.target.value) || 0)}
+              />
+            </div>
+          </div>
+
+          {/* Distintivo ambiental */}
+          <div className="form-group">
+            <label htmlFor={distintivoSelectId} className="form-label">
+              Distintivo ambiental
+              <span className="tooltip-icon" title="Bonificado en Andalucía (CERO 1 %), Galicia, Baleares y Cataluña (CERO 0 %), Baleares (ECO 2 %) y Comunitat Valenciana (6 %).">ⓘ</span>
+            </label>
+            <select
+              id={distintivoSelectId}
+              className="form-control"
+              value={distintivo}
+              onChange={e => setDistintivo(e.target.value as DistintivoITP)}
+            >
+              <option value="ninguno">Ninguno / B / C</option>
+              <option value="eco">ECO</option>
+              <option value="cero">CERO</option>
+            </select>
           </div>
 
           {/* Casos especiales */}
@@ -194,19 +298,7 @@ export function CalculadoraTransferencia({
                 />
                 <span className="checkmark"></span>
                 <span className="chk-label">
-                  <strong>Compraventa profesional</strong> (Comprado a concesionario / empresa: Sujeto a IVA o REBU, <strong>Exento de ITP</strong>)
-                </span>
-              </label>
-
-              <label className="custom-checkbox">
-                <input
-                  type="checkbox"
-                  checked={esCiclomotor}
-                  onChange={e => setEsCiclomotor(e.target.checked)}
-                />
-                <span className="checkmark"></span>
-                <span className="chk-label">
-                  Es ciclomotor (Tasa reducida DGT: <strong>27,85 €</strong>; exento en Cataluña, Baleares y Navarra)
+                  <strong>Compraventa profesional</strong> (Comprado a concesionario / empresa: Sujeto a IVA o REBU, <strong>No sujeto a ITP</strong>)
                 </span>
               </label>
 
@@ -222,17 +314,33 @@ export function CalculadoraTransferencia({
                 </span>
               </label>
 
-              <label className="custom-checkbox">
-                <input
-                  type="checkbox"
-                  checked={esCeroEmisiones}
-                  onChange={e => setEsCeroEmisiones(e.target.checked)}
-                />
-                <span className="checkmark"></span>
-                <span className="chk-label">
-                  Etiqueta 0 Emisiones (CERO) (Bonificado en Galicia al 0 % y en Andalucía al 1 %)
-                </span>
-              </label>
+              {esCiudadAutonoma && (
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={esResidenteCiudadAutonoma}
+                    onChange={e => setEsResidenteCiudadAutonoma(e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="chk-label">
+                    Comprador con residencia o domicilio fiscal en Ceuta/Melilla ({textoBonificacionResidencia})
+                  </span>
+                </label>
+              )}
+
+              {comunidadSlug === SLUG_EXTREMADURA && (
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={esComercialConActividad}
+                    onChange={e => setEsComercialConActividad(e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="chk-label">
+                    Vehículo comercial o industrial ligero (hasta 3.500 kg) adquirido por un contribuyente con actividad económica y afecto a ella (4 %)
+                  </span>
+                </label>
+              )}
 
               <label className="custom-checkbox">
                 <input
@@ -242,7 +350,7 @@ export function CalculadoraTransferencia({
                 />
                 <span className="checkmark"></span>
                 <span className="chk-label">
-                  Añadir Tasa DGT de cambio de titularidad ({esCiclomotor ? '27,85 €' : '55,70 €'})
+                  Añadir Tasa DGT de cambio de titularidad ({formatEUR(getTasaTransferencia(ANIO_FISCAL, esCiclomotor).importe)})
                 </span>
               </label>
 
@@ -254,7 +362,7 @@ export function CalculadoraTransferencia({
                 />
                 <span className="checkmark"></span>
                 <span className="chk-label">
-                  Estimar honorarios de gestoría telemática (+ 60,00 €)
+                  Estimar honorarios de gestoría telemática (+ {formatEUR(HONORARIOS_GESTORIA_ITP)})
                 </span>
               </label>
             </div>
@@ -284,7 +392,10 @@ export function CalculadoraTransferencia({
         <div className="breakdown-list">
           <div className="breakdown-item">
             <div className="item-info">
-              <span className="item-title">Impuesto de Transmisiones (ITP)</span>
+              <span className="item-title">
+                  Impuesto de Transmisiones (ITP)
+                  {resultado.clasificacionCuotaCero && ` · ${etiquetaCuotaCeroITP(resultado.clasificacionCuotaCero)}`}
+                </span>
               <span className="item-detail">
                 {resultado.motivoExencionOCuotaCero || `Tipo ${resultado.tipoPorcentajeAplicado.toFixed(2).replace('.', ',')} % sobre base ${formatEUR(resultado.baseLiquidable)}`}
               </span>
@@ -336,6 +447,10 @@ export function CalculadoraTransferencia({
             <small>{resultado.justificacionBase}</small>
           </div>
         </div>
+
+        {resultado.avisos.map(aviso => (
+          <p key={aviso} className="card-desc">{aviso}</p>
+        ))}
 
         {/* Verificación Obligatoria */}
         <VerificationNotice

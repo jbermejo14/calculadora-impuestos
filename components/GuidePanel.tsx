@@ -1,5 +1,25 @@
 import React from 'react';
 import Link from 'next/link';
+import { getDepreciacionData } from '@/lib/itp';
+import { getIEDMTData, type TramoIEDMT } from '@/lib/iedmt';
+import { getTasasDgtData } from '@/lib/fees';
+
+const GUIDE_ANIO = 2026;
+const GUIDE_TERRITORIO_GENERAL = 'peninsula-y-baleares';
+const GUIDE_EPIGRAFES_TURISMO = ['1.º', '2.º', '3.º', '4.º'];
+
+function guideFormatPercent(value: number): string {
+  return `${value.toFixed(2).replace('.', ',')} %`;
+}
+
+function guideFormatEuros(value: number): string {
+  return `${value.toFixed(2).replace('.', ',')} €`;
+}
+
+function guideTagClass(tramo: TramoIEDMT): string {
+  if (tramo.tipoPorcentaje === 0) return 'tag tag-green';
+  return tramo.epigrafe === GUIDE_EPIGRAFES_TURISMO[GUIDE_EPIGRAFES_TURISMO.length - 1] ? 'tag tag-red' : 'tag';
+}
 
 interface GuideCardHeaderProps {
   number: number;
@@ -28,6 +48,12 @@ function GuideCardHeader({ number, title, href, linkLabel }: GuideCardHeaderProp
 
 /** Contenido del panel "Tramos": resumen de normativa con enlaces a las guías completas. */
 export function GuidePanel() {
+  const tramosTurismo = getIEDMTData(GUIDE_ANIO).territorios[GUIDE_TERRITORIO_GENERAL].tramos.filter(tramo =>
+    GUIDE_EPIGRAFES_TURISMO.includes(tramo.epigrafe)
+  );
+  const tramosDepreciacion = getDepreciacionData(GUIDE_ANIO).tramos;
+  const tasas = Object.entries(getTasasDgtData(GUIDE_ANIO).tasas);
+
   return (
     <div className="card">
       <div className="card-header">
@@ -54,26 +80,13 @@ export function GuidePanel() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><span className="tag tag-green">Epígrafe 1.º</span></td>
-                  <td>≤ 120 g/km</td>
-                  <td className="bold orange">0,0 % (Exento)</td>
-                </tr>
-                <tr>
-                  <td><span className="tag">Epígrafe 2.º</span></td>
-                  <td>&gt; 120 y &lt; 160 g/km</td>
-                  <td className="bold">4,75 %</td>
-                </tr>
-                <tr>
-                  <td><span className="tag">Epígrafe 3.º</span></td>
-                  <td>≥ 160 y &lt; 200 g/km</td>
-                  <td className="bold">9,75 %</td>
-                </tr>
-                <tr>
-                  <td><span className="tag tag-red">Epígrafe 4.º</span></td>
-                  <td>≥ 200 g/km</td>
-                  <td className="bold orange">14,75 %</td>
-                </tr>
+                {tramosTurismo.map(tramo => (
+                  <tr key={tramo.epigrafe}>
+                    <td><span className={guideTagClass(tramo)}>Epígrafe {tramo.epigrafe}</span></td>
+                    <td>{tramo.descripcion}</td>
+                    <td className="bold orange">{guideFormatPercent(tramo.tipoPorcentaje)}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -90,48 +103,16 @@ export function GuidePanel() {
               <thead>
                 <tr>
                   <th>Antigüedad</th>
-                  <th>Coeficiente</th>
-                  <th>Antigüedad</th>
-                  <th>Coeficiente</th>
+                  <th>Porcentaje s/ valor de nuevo</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Hasta 1 año</td>
-                  <td className="orange bold">100 %</td>
-                  <td>6 a 7 años</td>
-                  <td className="orange bold">34 %</td>
-                </tr>
-                <tr>
-                  <td>1 a 2 años</td>
-                  <td className="orange bold">84 %</td>
-                  <td>7 a 8 años</td>
-                  <td className="orange bold">28 %</td>
-                </tr>
-                <tr>
-                  <td>2 a 3 años</td>
-                  <td className="orange bold">67 %</td>
-                  <td>8 a 9 años</td>
-                  <td className="orange bold">24 %</td>
-                </tr>
-                <tr>
-                  <td>3 a 4 años</td>
-                  <td className="orange bold">56 %</td>
-                  <td>9 a 10 años</td>
-                  <td className="orange bold">19 %</td>
-                </tr>
-                <tr>
-                  <td>4 a 5 años</td>
-                  <td className="orange bold">47 %</td>
-                  <td>10 a 11 años</td>
-                  <td className="orange bold">17 %</td>
-                </tr>
-                <tr>
-                  <td>5 a 6 años</td>
-                  <td className="orange bold">39 %</td>
-                  <td>&gt; 12 años</td>
-                  <td className="orange bold">10 %</td>
-                </tr>
+                {tramosDepreciacion.map(tramo => (
+                  <tr key={tramo.etiqueta}>
+                    <td>{tramo.etiqueta}</td>
+                    <td className="orange bold">{tramo.porcentaje} %</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -141,10 +122,11 @@ export function GuidePanel() {
         <div className="guide-card">
           <GuideCardHeader number={3} title="Tasas DGT" href="/guia/tasas-dgt" linkLabel="Ver desglose de tasas →" />
           <ul className="guide-list">
-            <li><strong>Tasa 1.5 (Transferencia vehículos a motor):</strong> 55,70 € para turismos, furgonetas, motocicletas y camiones.</li>
-            <li><strong>Tasa 1.2 (Transferencia ciclomotores):</strong> 27,85 €.</li>
-            <li><strong>Tasa 1.1 (Matriculación ordinaria):</strong> 99,77 €.</li>
-            <li><strong>Tasa 4.1 (Informe de vehículo / VMP):</strong> 8,67 €.</li>
+            {tasas.map(([clave, tasa]) => (
+              <li key={clave}>
+                <strong>Tasa {tasa.codigo} ({tasa.concepto}):</strong> {guideFormatEuros(tasa.importe)}.
+              </li>
+            ))}
           </ul>
         </div>
 
