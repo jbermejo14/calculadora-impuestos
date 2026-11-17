@@ -2,9 +2,11 @@
 
 Aplicación web desarrollada con **Next.js (App Router)** para calcular de forma orientativa los tributos exigidos en España al registrar o transferir un vehículo:
 
-1. **Impuesto Especial sobre Determinados Medios de Transporte (IEDMT - Modelo 576 AEAT):** Primera matriculación de vehículos nuevos o de importación según emisiones de $CO_2$ (WLTP), con regímenes diferenciados para Península y Baleares, Canarias (REF) y Ceuta y Melilla (0 %).
-2. **Impuesto de Transmisiones Patrimoniales Onerosas (ITP - Modelos 620 y 621):** Compraventa de vehículos usados entre particulares según las normas de las 17 Comunidades Autónomas y de las Ciudades Autónomas de Ceuta y Melilla. Aplica la tabla de depreciación por antigüedad del BOE (Anexo IV) y calcula la base liquidable mínima de Hacienda para evitar liquidaciones complementarias (paralelas).
-3. **Tasas de la DGT:** Tarifas actualizadas de Tráfico para cambio de titularidad (Tasa 1.5 de 55,70 € o Tasa 1.2 de 27,85 € para ciclomotores) y matriculación ordinaria (Tasa 1.1 de 99,77 €).
+1. **Impuesto Especial sobre Determinados Medios de Transporte (IEDMT - Modelo 576 AEAT):** Primera matriculación de vehículos nuevos o de importación según emisiones de $CO_2$ (WLTP), con epígrafes para turismos, motocicletas, autocaravanas y quads, y regímenes diferenciados para Península y Baleares, Canarias (REF) y Ceuta y Melilla.
+2. **Impuesto de Transmisiones Patrimoniales Onerosas (ITP - Modelos 620 y 621):** Compraventa de vehículos usados entre particulares según las normas de las 17 Comunidades Autónomas y de las Ciudades Autónomas de Ceuta y Melilla, con sus cuotas fijas, exenciones y tipos por distintivo ambiental. Aplica la tabla de depreciación por antigüedad del BOE (Anexo IV) y calcula la base liquidable mínima de Hacienda para evitar liquidaciones complementarias (paralelas).
+3. **Tasas de la DGT:** Cambio de titularidad, ciclomotores y matriculación ordinaria. Los importes están en `data/{AÑO}/tasas-dgt.json`.
+
+Todos los valores fiscales se contrastaron con el BOE y los boletines autonómicos. El detalle de cada verificación y lo que queda pendiente está en [`docs/verificacion-2026-estatal.md`](docs/verificacion-2026-estatal.md) y [`docs/verificacion-2026-itp.md`](docs/verificacion-2026-itp.md). El diseño de los módulos y sus contratos está en [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ---
 
@@ -18,20 +20,26 @@ Aplicación web desarrollada con **Next.js (App Router)** para calcular de forma
 Las versiones exactas configuradas son `next@16.4.6`, `react@19.3.0`, `react-dom@19.3.0` y `tailwindcss@4.3.3`:
 
 ```bash
-npm install
+npm install --force
+```
+`--force` hace falta en Windows para instalar la variante WASM de Tailwind (ver "Estilos y marca"). En Linux y macOS basta `npm install`.
+
+Crea también el fichero del titular a partir de la plantilla (ver "Publicación en ododex.com"):
+```bash
+cp config/titular.example.json config/titular.json
 ```
 
 ### Ejecución en desarrollo
 ```bash
 npm run dev
 ```
-La aplicación estará disponible en `http://localhost:3000`.
+La aplicación estará disponible en `http://localhost:3000/es/impuestos` (la raíz `/` da 404 por la ruta base).
 
 ### Compilación y generación estática (SSG)
 ```bash
 npm run build
 ```
-Genera de forma estática (SSG) todas las 27 páginas indexables del portal.
+Genera de forma estática (SSG) todas las páginas: las 27 indexables del sitemap y las 3 legales, que no se indexan.
 
 ---
 
@@ -87,9 +95,12 @@ npm test
 
 ### Qué verifican las pruebas:
 1. **Integridad de Fuentes y Datos (`tests/data-sources.test.ts`):** Falla si falta algún archivo fiscal del año en curso, si falta la URL de la fuente en algún dato, si no se especifica la norma legal, si el estado de verificación no es válido o si un dato verificado no lleva fecha ISO (los pendientes deben llevar `null`). `tests/verification.test.ts` cubre el texto "Verificado el {fecha}".
-2. **Impuesto de Matriculación (`tests/iedmt.test.ts`):** Comprueba cada tramo de $CO_2$ en Península (0 %, 4,75 %, 9,75 %, 14,75 %), Canarias (0 %, 3,75 %, 8,75 %, 13,75 %), Ceuta y Melilla (0 %), bonificación del 50 % por Familia Numerosa, exención por Minusvalía y exención para vehículos comerciales.
-3. **ITP y Depreciación BOE (`tests/itp.test.ts`):** Comprueba el ITP de las 17 comunidades autónomas y de Ceuta y Melilla con al menos un caso real, las fronteras exactas de los 13 tramos de depreciación del Anexo IV del BOE, compraventa profesional (no sujeta a ITP), ciclomotores exentos, vehículos históricos, exención de coches de más de 10 años en Cataluña y Navarra, y bonificación etiqueta CERO emisiones.
-4. **Rutas Estáticas y SEO (`tests/routes-and-sitemap.test.ts`):** Valida todos los slugs de comunidades, territorios y guías, respuesta 404 para slugs inválidos, y la generación íntegra del sitemap (27 páginas canónicas).
+2. **Impuesto de Matriculación (`tests/iedmt.test.ts`):** Comprueba los epígrafes 1.º a 9.º en cada territorio, la no sujeción de motos de hasta 250 cc y de comerciales afectos a actividad, quads, autocaravanas, familia numerosa y minusvalía.
+3. **ITP y Depreciación BOE (`tests/itp.test.ts`):** Comprueba el ITP de las 17 comunidades autónomas y de Ceuta y Melilla con al menos un caso real, las fronteras exactas de los 13 tramos de depreciación del Anexo IV del BOE, las cuotas fijas por antigüedad y cilindrada, compraventa profesional (no sujeta), ciclomotores, vehículos históricos, la exoneración de diez años de Cataluña y Navarra y los distintivos CERO y ECO.
+4. **Correcciones de la revisión (`tests/m-correcciones.test.ts`):** Distinción entre exención, tipo 0 %, cuota fija 0 € y no obligación; avisos de Navarra; IGIC e IPSI en lugar de IVA; ausencia de importes escritos a mano en páginas y componentes.
+5. **Rutas Estáticas y SEO (`tests/routes-and-sitemap.test.ts`, `tests/site.test.ts`):** Valida todos los slugs de comunidades, territorios y guías, respuesta 404 para slugs inválidos, la generación íntegra del sitemap (27 páginas canónicas), las URLs absolutas con la ruta base y que `next.config.ts` y `lib/site.ts` usen la misma ruta base.
+6. **Páginas legales (`tests/legal.test.ts`, `tests/legal-pages.test.tsx`):** Lectura y validación del titular, uso de la plantilla cuando falta `config/titular.json`, marcadores pendientes, contenido mínimo de cada página y carga condicional de AdSense.
+7. **Interfaz (`tests/ui-*.test.ts(x)`):** Contraste de colores en los dos temas, marca Ododex, ausencia de colores fijos, enlaces por territorio y comunidad, y pestañas de la home.
 
 ---
 
@@ -134,22 +145,34 @@ Los datos fiscales no están incrustados en componentes visuales, sino organizad
 ```
 calculadora-impuestos/
 ├── app/
-│   ├── globals.css                       # Variables CSS negro/naranja, estilos y print
-│   ├── layout.tsx                        # Layout raíz con fuentes y tema oscuro/claro
+│   ├── globals.css                       # Tokens de color por tema y estilos
+│   ├── icon.svg                          # Favicon
+│   ├── layout.tsx                        # Layout raíz: fuentes, tema, AdSense y pie
 │   ├── not-found.tsx                     # Página 404 personalizada
 │   ├── page.tsx                          # Home: calculadoras matriculación e ITP
-│   ├── sitemap.ts                        # Generación dinámica de sitemap.xml
+│   ├── sitemap.ts                        # sitemap.xml con URLs absolutas
+│   ├── aviso-legal/page.tsx              # Aviso legal (LSSI art. 10)
+│   ├── privacidad/page.tsx               # Política de privacidad (RGPD art. 13)
+│   ├── cookies/page.tsx                  # Política de cookies
 │   ├── guia/[tema]/page.tsx              # 4 páginas estáticas de guías
 │   ├── impuesto-matriculacion/[territorio]/page.tsx  # 3 páginas por territorio
 │   └── itp-coche-segunda-mano/[comunidad]/page.tsx   # 19 páginas por CCAA
 ├── components/
+│   ├── AdSenseScript.tsx                 # Script de AdSense y CMP de Google (si está configurado)
+│   ├── BrandLogo.tsx                     # Logo Ododex claro/oscuro
 │   ├── Breadcrumbs.tsx                   # Migas de pan + Schema.org BreadcrumbList
 │   ├── CalculadoraMatriculacion.tsx      # Calculadora interactiva IEDMT
 │   ├── CalculadoraTransferencia.tsx      # Calculadora interactiva ITP
-│   ├── Footer.tsx                        # Pie de página y enlaces institucionales
-│   ├── Header.tsx                        # Cabecera con botón Modo Oscuro/Claro
-│   ├── HomeTabs.tsx                      # Pestañas de navegación de la home
+│   ├── CommunityLinks.tsx                # Desplegable de páginas por comunidad
+│   ├── ConsentSettingsButton.tsx         # Botón "Configurar cookies"
+│   ├── Footer.tsx                        # Pie: avisos, enlaces legales y comunidades
+│   ├── GuidePanel.tsx                    # Pestaña de guía de tramos y exenciones
+│   ├── Header.tsx                        # Cabecera con marca y botón de tema
+│   ├── HomeTabs.tsx                      # Pestañas de la home (sincronizadas con el hash)
+│   ├── TerritoryLinks.tsx                # Enlaces a las páginas por territorio
 │   └── VerificationNotice.tsx            # Aviso de verificación con enlace a norma
+├── config/
+│   └── titular.example.json              # Plantilla de datos del titular (titular.json no va a git)
 ├── data/
 │   └── 2026/                             # Datos fiscales versionados con fuente
 │       ├── depreciacion.json
@@ -157,15 +180,21 @@ calculadora-impuestos/
 │       ├── iedmt.json
 │       ├── itp.json
 │       └── tasas-dgt.json
+├── docs/
+│   ├── verificacion-2026-estatal.md      # Verificación de IEDMT, tasas y depreciación
+│   └── verificacion-2026-itp.md          # Verificación del ITP por comunidad
 ├── lib/
 │   ├── fees.ts                           # Lógica pura de tasas DGT
 │   ├── iedmt.ts                          # Lógica pura de matriculación
 │   ├── itp.ts                            # Lógica pura de ITP y depreciación BOE
-│   └── site.ts                           # Helper de URLs canónicas absolutas
-├── tests/
-│   ├── data-sources.test.ts              # Prueba de fuentes e integridad de datos
-│   ├── iedmt.test.ts                     # Pruebas de tramos y bonificaciones IEDMT
-│   ├── itp.test.ts                       # Pruebas de comunidades y fronteras BOE
-│   └── routes-and-sitemap.test.ts        # Pruebas de slugs, 404 y sitemap
+│   ├── legal.ts                          # Lectura y validación de los datos del titular
+│   ├── site.ts                           # Marca, ruta base y URLs absolutas
+│   └── verification.ts                   # Textos según el estado de verificación
+├── public/brand/                         # Logos y favicon de Ododex
+├── tests/                                # Pruebas (ver "Ejecución de Pruebas Automatizadas")
+├── next.config.ts                        # Ruta base /es/impuestos
+├── postcss.config.mjs                    # Tailwind por PostCSS
+├── postcss-tailwind-windows.cjs          # Extracción de clases para Tailwind WASM en Windows
+├── ARCHITECTURE.md                       # Diseño y contratos de los módulos
 └── README.md
 ```
