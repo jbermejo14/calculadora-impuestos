@@ -12,6 +12,7 @@ import {
 import { getTasaTransferencia } from '@/lib/fees';
 import { etiquetaVerificacion } from '@/lib/verification';
 import { absoluteUrl, SITE_NAME } from '@/lib/site';
+import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraTransferencia } from '@/components/CalculadoraTransferencia';
 import { VerificationNotice } from '@/components/VerificationNotice';
@@ -263,6 +264,8 @@ export default async function ComunidadPage({
         <CalculadoraTransferencia initialComunidad={com.slug} />
       </div>
 
+      <AdSlot className="mb-8" />
+
       {/* Enlaces a Otras Comunidades Autónomas (Interlinking) */}
       <div className="card">
         <h2 className="text-lg font-bold mb-2">Calculadora de ITP en otras Comunidades Autónomas</h2>
@@ -279,6 +282,8 @@ export default async function ComunidadPage({
           ))}
         </div>
       </div>
+
+      <AdSlot className="mt-8" />
     </main>
   );
 }

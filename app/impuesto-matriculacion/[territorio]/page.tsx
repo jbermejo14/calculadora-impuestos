@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getIEDMTData } from '@/lib/iedmt';
 import { absoluteUrl, SITE_NAME } from '@/lib/site';
+import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraMatriculacion } from '@/components/CalculadoraMatriculacion';
 import { VerificationNotice } from '@/components/VerificationNotice';
@@ -136,6 +137,8 @@ export default async function TerritorioMatriculacionPage({
         <CalculadoraMatriculacion initialTerritorio={terr.slug} />
       </div>
 
+      <AdSlot className="mb-8" />
+
       {/* Otros Territorios */}
       <div className="card">
         <h2 className="text-lg font-bold mb-2">Otros Territorios Fiscales</h2>
@@ -154,6 +157,8 @@ export default async function TerritorioMatriculacionPage({
           ))}
         </div>
       </div>
+
+      <AdSlot className="mt-8" />
     </main>
   );
 }

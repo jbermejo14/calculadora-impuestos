@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import guias2026 from '@/data/2026/guias.json';
 import { absoluteUrl, SITE_NAME } from '@/lib/site';
+import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { VerificationNotice } from '@/components/VerificationNotice';
 import { getDepreciacionData } from '@/lib/itp';
@@ -236,6 +237,8 @@ export default async function GuiaTemaPage({
         </div>
       </div>
 
+      <AdSlot className="mb-8" />
+
       {/* Otras Guías */}
       <div className="card">
         <h2 className="text-lg font-bold mb-2">Otras Guías Fiscales y de Tráfico</h2>
@@ -252,6 +255,8 @@ export default async function GuiaTemaPage({
           ))}
         </div>
       </div>
+
+      <AdSlot className="mt-8" />
     </main>
   );
 }

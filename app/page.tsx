@@ -1,4 +1,5 @@
 import { getComunidadesList } from '@/lib/itp';
+import { AdSlot } from '@/components/AdSlot';
 import { HomeTabs } from '@/components/HomeTabs';
 
 export default function HomePage() {
@@ -17,6 +18,8 @@ export default function HomePage() {
       </div>
 
       <HomeTabs comunidades={comunidades} />
+
+      <AdSlot className="mt-8" />
     </main>
   );
 }

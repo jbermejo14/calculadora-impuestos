@@ -460,3 +460,20 @@ Todo es un único encargo de interfaz, en este orden:
   - 375 y 1280 px, en tema claro y oscuro, sin desbordamiento horizontal.
   - Las pestañas caben en una fila en móvil.
   - Ningún enlace azul subrayado.
+
+## 5. Anuncios
+
+Bloques manuales de AdSense (especificación común: sección 8 de `ododex-sitio/ARCHITECTURE.md`).
+
+- Componente `components/AdSlot.tsx` (cliente): `AdSlot({ className? })`. No renderiza nada sin cliente válido (`NEXT_PUBLIC_ADSENSE_CLIENT`, validado con `getAdSenseClient`) y unidad de 10 dígitos (`NEXT_PUBLIC_ADSENSE_SLOT`). Muestra "Publicidad" y un `<ins class="adsbygoogle">`; hace un solo `push` por instancia.
+- Estilo: clase `.ad-slot` en `@layer components` de `app/globals.css` (tokens, `min-height` 280 px y 250 px desde `md`, `overflow: hidden`). El margen lo pone cada página con `className` (`mb-8` o `mt-8`, como las tarjetas).
+- Máximo 3 por página. Sin anuncios en `/aviso-legal`, `/privacidad`, `/cookies` ni en la 404.
+
+| Página | Huecos |
+|---|---|
+| `/` (`app/page.tsx`) | 1) tras el bloque de calculadoras (pestañas con su resultado), antes del pie |
+| `/impuesto-matriculacion/[territorio]` | 1) tras la calculadora preseleccionada; 2) al final, tras los otros territorios |
+| `/itp-coche-segunda-mano/[comunidad]` | 1) tras la calculadora preseleccionada; 2) al final, tras las otras comunidades |
+| `/guia/[tema]` | 1) tras el contenido principal de la guía; 2) al final, tras las otras guías |
+
+Pruebas: `tests/ad-slot.test.tsx`.
