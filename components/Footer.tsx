@@ -1,15 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
 import { getComunidadesList } from '@/lib/itp';
+import type { NetworkSection } from '@/lib/network';
 import { SITE_NAME } from '@/lib/site';
 import { ConsentSettingsButton } from '@/components/ConsentSettingsButton';
 
 export interface FooterProps {
   /** Muestra el botón para cambiar el consentimiento; solo si AdSense está configurado. */
   mostrarConsentimiento?: boolean;
+  /** Otras webs de la red (sin la propia). null o vacío: no se pinta el bloque. */
+  redSecciones?: NetworkSection[] | null;
 }
 
-export function Footer({ mostrarConsentimiento = false }: FooterProps) {
+export function Footer({ mostrarConsentimiento = false, redSecciones = null }: FooterProps) {
   const comunidades = getComunidadesList(2026);
 
   return (
@@ -27,6 +30,17 @@ export function Footer({ mostrarConsentimiento = false }: FooterProps) {
           <Link href="/cookies">Cookies</Link>
           {mostrarConsentimiento && <ConsentSettingsButton />}
         </nav>
+        {redSecciones && redSecciones.length > 0 && (
+          <nav aria-label="Otras webs de Ododex" className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-muted mt-2">
+            <span>Otras webs de Ododex:</span>
+            {redSecciones.map(seccion => (
+              // Son webs de otra sección: <a> normal, sin next/link ni basePath propio.
+              <a key={seccion.ruta} href={seccion.ruta} title={seccion.descripcion} className="text-muted hover:text-accent transition-colors">
+                {seccion.nombre}
+              </a>
+            ))}
+          </nav>
+        )}
         <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-xs text-muted mt-2">
           <span>Comunidades Autónomas:</span>
           {comunidades.map(com => (

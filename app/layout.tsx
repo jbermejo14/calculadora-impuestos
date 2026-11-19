@@ -4,6 +4,7 @@ import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { AdSenseScript, getAdSenseClient } from '@/components/AdSenseScript';
+import { getNetworkSections } from '@/lib/network';
 import { absoluteUrl, getSiteUrl, SITE_NAME } from '@/lib/site';
 import { HOME_DESCRIPTION, HOME_TITLE } from '@/lib/seo';
 
@@ -98,7 +99,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
-        <Footer mostrarConsentimiento={getAdSenseClient() !== null} />
+        <Footer mostrarConsentimiento={getAdSenseClient() !== null} redSecciones={getNetworkSections()} />
         <AdSenseScript />
       </body>
     </html>
