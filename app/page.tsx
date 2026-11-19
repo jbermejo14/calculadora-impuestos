@@ -1,4 +1,5 @@
 import { getComunidadesList } from '@/lib/itp';
+import { homeWebApplicationJsonLd } from '@/lib/seo';
 import { AdSlot } from '@/components/AdSlot';
 import { HomeTabs } from '@/components/HomeTabs';
 
@@ -7,6 +8,10 @@ export default function HomePage() {
 
   return (
     <main className="main-wrapper">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeWebApplicationJsonLd()) }}
+      />
       <div className="mb-6">
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight mb-2">
           Calculadora de Impuestos de Vehículos (2026)

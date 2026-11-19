@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getIEDMTData } from '@/lib/iedmt';
 import { absoluteUrl, SITE_NAME } from '@/lib/site';
+import { descriptionMatriculacionTerritorio, titleMatriculacionTerritorio } from '@/lib/seo';
 import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraMatriculacion } from '@/components/CalculadoraMatriculacion';
@@ -33,8 +34,8 @@ export async function generateMetadata({
     };
   }
 
-  const title = `Impuesto de Matriculación en ${terr.nombre} 2026: Tramos CO2 y Calculadora`;
-  const description = `Consulta los tramos de emisiones de CO2 y tipos del Impuesto de Matriculación (IEDMT Modelo 576 AEAT) aplicables en ${terr.nombre} para 2026.`;
+  const title = titleMatriculacionTerritorio(terr.nombre);
+  const description = descriptionMatriculacionTerritorio(terr.nombre);
   const canonical = absoluteUrl(`/impuesto-matriculacion/${terr.slug}`);
 
   return {

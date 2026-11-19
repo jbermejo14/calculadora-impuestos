@@ -477,3 +477,10 @@ Bloques manuales de AdSense (especificación común: sección 8 de `ododex-sitio
 | `/guia/[tema]` | 1) tras el contenido principal de la guía; 2) al final, tras las otras guías |
 
 Pruebas: `tests/ad-slot.test.tsx`.
+
+## 6. SEO de metadatos
+
+- Regla: título completo (con el sufijo ` | Ododex` de la plantilla del layout) de 65 caracteres como máximo, apuntando a 60, con la palabra clave al principio y el dato clave si cabe. Descripciones de 120 a 160 caracteres. El H1 no cambia.
+- Los títulos y descripciones salen de funciones puras de `lib/seo.ts` (`titleItpComunidad`, `titleMatriculacionTerritorio`, `titleGuia`, `descriptionItpComunidad`, `descriptionMatriculacionTerritorio`). Cada título tiene variantes de más a menos larga y se elige la primera que cabe en el objetivo (`seoPickTitle`); la aclaración entre paréntesis del nombre se omite.
+- La portada usa `HOME_TITLE` (con marca, 51 caracteres) y `HOME_DESCRIPTION` desde `app/layout.tsx`, y emite JSON-LD `WebApplication` con URL absoluta (`absoluteUrl`).
+- Los títulos de ITP usan el tipo general (`tipoGeneral`), nunca el efectivo con bonificación de residencia. Pruebas: `tests/seo.test.tsx` recorre todas las comunidades, territorios y guías reales.

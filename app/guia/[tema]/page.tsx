@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import guias2026 from '@/data/2026/guias.json';
 import { absoluteUrl, SITE_NAME } from '@/lib/site';
+import { titleGuia } from '@/lib/seo';
 import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { VerificationNotice } from '@/components/VerificationNotice';
@@ -36,7 +37,7 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${guia.titulo} 2026`;
+  const title = titleGuia(guia.titulo);
   const description = guia.descripcion;
   const canonical = absoluteUrl(`/guia/${guia.slug}`);
 

@@ -12,6 +12,7 @@ import {
 import { getTasaTransferencia } from '@/lib/fees';
 import { etiquetaVerificacion } from '@/lib/verification';
 import { absoluteUrl, SITE_NAME } from '@/lib/site';
+import { descriptionItpComunidad, titleItpComunidad } from '@/lib/seo';
 import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraTransferencia } from '@/components/CalculadoraTransferencia';
@@ -39,8 +40,8 @@ export async function generateMetadata({
   const { comunidad: slug } = await params;
   try {
     const com = getComunidadITP(2026, slug);
-    const title = `ITP Coche Segunda Mano en ${com.nombre} 2026: Tipo ${com.tipoGeneral} % y Calculadora`;
-    const description = `Calcula el Impuesto de Transmisiones Patrimoniales (ITP) de vehículos usados en ${com.nombre} para 2026. Tipo aplicable del ${com.tipoGeneral} %, ${com.modelo}, bonificaciones y tasas DGT.`;
+    const title = titleItpComunidad(com.nombre, com.tipoGeneral);
+    const description = descriptionItpComunidad(com.nombre, com.tipoGeneral);
     const canonical = absoluteUrl(`/itp-coche-segunda-mano/${com.slug}`);
 
     return {

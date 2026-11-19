@@ -35,7 +35,7 @@
     "tasas-dgt": {
       "slug": "tasas-dgt",
       "titulo": "Tasas Oficiales de la DGT para Vehículos",
-      "descripcion": "Importes actualizados de las tasas de Tráfico para cambio de titularidad (Tasa 1.5), ciclomotores (Tasa 1.2), matriculación (Tasa 1.1) e informes de antecedentes.",
+      "descripcion": "Importes actualizados de las tasas de Tráfico para cambio de titularidad (Tasa 1.5), ciclomotores (Tasa 1.2), matriculación (Tasa 1.1) y antecedentes.",
       "norma": "Ley 16/1979, de 2 de octubre, sobre tasas de la Jefatura Central de Tráfico, artículo 6 (importes actualizados anualmente conforme a la Ley de Presupuestos Generales del Estado; catálogo oficial de tasas de la DGT)",
       "fuente": "https://sedeclave.dgt.gob.es/WEB_Tasas/jsp/tasas/download/catalogoPrecioTasas.pdf",
       "estadoVerificacion": "verificado",
