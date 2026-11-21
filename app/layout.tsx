@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { getSiteUrl } from '@/lib/site';
+import { getSiteUrl, absoluteUrl } from '@/lib/site';
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -54,7 +54,19 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: 'AutoTax',
     title: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP',
-    description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT (datos pendientes de revisión).'
+    description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT.',
+    images: [
+      {
+        url: absoluteUrl('/brand/ododex-og.png'),
+        width: 1200,
+        height: 630,
+        alt: 'Calculadora de Impuestos de Vehículos · Ododex'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: [absoluteUrl('/brand/ododex-og.png')]
   }
 };
 

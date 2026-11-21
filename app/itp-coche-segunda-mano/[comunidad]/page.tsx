@@ -96,8 +96,40 @@ export default async function ComunidadPage({
     incluirTasaDgt: true
   });
 
+  const faqs = [
+    {
+      question: `¿Qué tipo de ITP se aplica a un coche de segunda mano en ${com.nombre}?`,
+      answer: `En ${com.nombre}, el tipo general del Impuesto de Transmisiones Patrimoniales (ITP) para vehículos usados es del ${(com.tipoEfectivo ?? com.tipoGeneral).toFixed(1).replace('.', ',')} %. Se liquida sobre el valor mayor entre el precio de venta en contrato y el valor mínimo fiscal establecido en las tablas oficiales del BOE con los coeficientes de depreciación por antigüedad.`
+    },
+    {
+      question: `¿Qué modelo hay que presentar para pagar el ITP en ${com.nombre}?`,
+      answer: `El trámite se liquida ante ${com.organismo} mediante el ${com.modelo}. El plazo general de presentación es de 30 días hábiles a contar desde la fecha de firma del contrato de compraventa.`
+    },
+    {
+      question: `¿Cuánto cuesta en total transferir un coche en ${com.nombre}?`,
+      answer: `El coste total se compone de la cuota del ITP autonómico más la tasa 1.5 de la DGT para el cambio de titularidad (55,70 € para turismos y motos, o 27,85 € para ciclomotores).`
+    }
+  ];
+
+  const jsonLdFaq = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(f => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer
+      }
+    }))
+  };
+
   return (
     <main className="main-wrapper">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
+      />
       <Breadcrumbs
         items={[
           { name: 'Inicio', url: '/' },
@@ -237,6 +269,46 @@ export default async function ComunidadPage({
       <div className="mb-8">
         <h2 className="text-xl font-bold mb-3">Calcula el ITP de tu coche en {com.nombre}</h2>
         <CalculadoraTransferencia initialComunidad={com.slug} />
+      </div>
+
+      {/* Preguntas Frecuentes sobre el ITP en la Comunidad */}
+      <div className="card mb-8">
+        <h2 className="text-lg font-bold mb-3">Preguntas Frecuentes sobre el ITP en {com.nombre}</h2>
+        <div className="space-y-4">
+          {faqs.map((faq, idx) => (
+            <div key={idx} className="p-4 rounded-lg bg-zinc-900/60 border border-zinc-800">
+              <h3 className="font-semibold text-sm text-slate-100 mb-1.5">{faq.question}</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tarjeta de Enlazado Cruzado con Llamadas a Revisión */}
+      <div className="card mb-8 border border-orange-500/30 bg-orange-500/5 p-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <div className="text-xs font-bold text-orange-500 uppercase tracking-wider mb-1">
+              Seguridad del vehículo de ocasión
+            </div>
+            <h3 className="text-base font-bold text-slate-100">
+              ¿Vas a comprar este coche? Comprueba si tiene campañas de seguridad pendientes en la UE
+            </h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-xl">
+              Antes de firmar el contrato y liquidar el ITP, verifica gratis en el sistema oficial Safety Gate de la Comisión Europea
+              si la marca ha emitido llamadas a revisión por defectos de fábrica en airbags, frenos o motor.
+            </p>
+          </div>
+          <a
+            href="https://ododex.com/es/llamadas-revision"
+            className="btn btn-primary shrink-0 inline-flex items-center gap-2"
+          >
+            <span>Consultar llamadas a revisión</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
       </div>
 
       {/* Enlaces a Otras Comunidades Autónomas (Interlinking) */}

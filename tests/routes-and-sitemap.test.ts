@@ -81,4 +81,17 @@ test('Verificación de rutas estáticas, slugs, 404 y sitemap sin red', async (t
     assert.ok(robotsConfig.sitemap, 'Falta sitemap en robots.txt');
     assert.ok(typeof robotsConfig.sitemap === 'string' && robotsConfig.sitemap.endsWith('/sitemap.xml'));
   });
+
+  await t.test('Marcado Schema FAQPage y enlazado cruzado a llamadas a revisión', () => {
+    const itpPage = fs.readFileSync(path.join(process.cwd(), 'app', 'itp-coche-segunda-mano', '[comunidad]', 'page.tsx'), 'utf-8');
+    const guiaPage = fs.readFileSync(path.join(process.cwd(), 'app', 'guia', '[tema]', 'page.tsx'), 'utf-8');
+
+    // Ambas páginas deben contener el schema FAQPage
+    assert.ok(itpPage.includes('@type\': \'FAQPage\'') || itpPage.includes('"@type": "FAQPage"'), 'Ficha ITP debe tener schema FAQPage');
+    assert.ok(guiaPage.includes('@type\': \'FAQPage\'') || guiaPage.includes('"@type": "FAQPage"'), 'Guías deben tener schema FAQPage');
+
+    // Ambas páginas deben tener el enlace cruzado a /es/llamadas-revision
+    assert.ok(itpPage.includes('ododex.com/es/llamadas-revision'), 'Ficha ITP debe enlazar a llamadas a revisión');
+    assert.ok(guiaPage.includes('ododex.com/es/llamadas-revision'), 'Guías deben enlazar a llamadas a revisión');
+  });
 });
