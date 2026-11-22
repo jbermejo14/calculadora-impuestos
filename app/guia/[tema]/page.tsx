@@ -5,6 +5,7 @@ import guias2026 from '@/data/2026/guias.json';
 import { absoluteUrl } from '@/lib/site';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { VerificationNotice } from '@/components/VerificationNotice';
+import { AdSlot } from '@/components/AdSlot';
 import { getDepreciacionData } from '@/lib/itp';
 import { getTasasDgtData } from '@/lib/fees';
 
@@ -26,11 +27,11 @@ export async function generateMetadata({
 
   if (!guia) {
     return {
-      title: 'Guía no encontrada | AutoTax'
+      title: 'Guía no encontrada | Ododex'
     };
   }
 
-  const title = `${guia.titulo} 2026 | AutoTax`;
+  const title = `${guia.titulo} 2026 | Ododex`;
   const description = guia.descripcion;
   const canonical = absoluteUrl(`/guia/${guia.slug}`);
 
@@ -46,7 +47,7 @@ export async function generateMetadata({
       url: canonical,
       type: 'article',
       locale: 'es_ES',
-      siteName: 'AutoTax'
+      siteName: 'Ododex'
     }
   };
 }
@@ -338,6 +339,8 @@ export default async function GuiaTemaPage({
           </a>
         </div>
       </div>
+
+      <AdSlot />
 
       {/* Otras Guías */}
       <div className="card">

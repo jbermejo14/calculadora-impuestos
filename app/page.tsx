@@ -1,5 +1,6 @@
 import { getComunidadesList } from '@/lib/itp';
 import { HomeTabs } from '@/components/HomeTabs';
+import { AdSlot } from '@/components/AdSlot';
 
 export default function HomePage() {
   const comunidades = getComunidadesList(2026);
@@ -17,6 +18,8 @@ export default function HomePage() {
       </div>
 
       <HomeTabs comunidades={comunidades} />
+
+      <AdSlot />
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { AdSenseScript } from '@/components/AdSenseScript';
 import { getSiteUrl, absoluteUrl } from '@/lib/site';
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP DGT',
-    template: '%s | AutoTax'
+    template: '%s | Ododex'
   },
   description: 'Calcula online los impuestos de matriculación (IEDMT Modelo 576) y transferencia de vehículos usados (ITP Modelos 620/621) en España para 2026 con tasas DGT actualizadas.',
   keywords: [
@@ -38,9 +39,9 @@ export const metadata: Metadata = {
     'modelo 576',
     'tasas DGT cambio titularidad'
   ],
-  authors: [{ name: 'AutoTax' }],
-  creator: 'AutoTax',
-  publisher: 'AutoTax',
+  authors: [{ name: 'Ododex' }],
+  creator: 'Ododex',
+  publisher: 'Ododex',
   robots: {
     index: true,
     follow: true
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'es_ES',
     url: siteUrl,
-    siteName: 'AutoTax',
+    siteName: 'Ododex',
     title: 'Calculadora de Impuestos de Vehículos 2026 | Matriculación e ITP',
     description: 'Calcula los impuestos de matriculación (IEDMT) y transferencia (ITP) de coches y motos en España con tipos autonómicos y tasas DGT.',
     images: [
@@ -97,6 +98,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <AdSenseScript />
       </body>
     </html>
   );

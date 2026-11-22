@@ -6,6 +6,7 @@ import { absoluteUrl } from '@/lib/site';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraTransferencia } from '@/components/CalculadoraTransferencia';
 import { VerificationNotice } from '@/components/VerificationNotice';
+import { AdSlot } from '@/components/AdSlot';
 
 export const dynamicParams = false;
 
@@ -40,12 +41,12 @@ export async function generateMetadata({
         url: canonical,
         type: 'website',
         locale: 'es_ES',
-        siteName: 'AutoTax'
+        siteName: 'Ododex'
       }
     };
   } catch {
     return {
-      title: 'Comunidad no encontrada | AutoTax'
+      title: 'Comunidad no encontrada | Ododex'
     };
   }
 }
@@ -214,6 +215,8 @@ export default async function ComunidadPage({
         </div>
       </div>
 
+      <AdSlot />
+
       {/* Ejemplos Reales Calculados */}
       <div className="card mb-8">
         <h2 className="text-lg font-bold mb-2">Ejemplos Reales de Transferencia en {com.nombre}</h2>
@@ -327,6 +330,8 @@ export default async function ComunidadPage({
           ))}
         </div>
       </div>
+
+      <AdSlot />
     </main>
   );
 }
