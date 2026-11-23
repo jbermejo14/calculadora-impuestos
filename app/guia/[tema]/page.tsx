@@ -8,7 +8,8 @@ import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { VerificationNotice } from '@/components/VerificationNotice';
 import { getDepreciacionData } from '@/lib/itp';
-import { getTasasDgtData } from '@/lib/fees';
+import { getTasasDgtData, getTasaTransferencia } from '@/lib/fees';
+import { FaqSection, type FaqItem } from '@/components/FaqSection';
 import { getIEDMTData } from '@/lib/iedmt';
 import { etiquetaVerificacion } from '@/lib/verification';
 
@@ -56,6 +57,63 @@ export async function generateMetadata({
       siteName: SITE_NAME
     }
   };
+}
+
+function formatImporte(importe: number): string {
+  return `${importe.toFixed(2).replace('.', ',')} €`;
+}
+
+/** Preguntas frecuentes por guía; solo se redactan con datos que existen en data/2026. */
+function buildGuiaFaqs(slug: string, guia: any): FaqItem[] {
+  const tasaTransferencia = getTasaTransferencia(2026);
+  const tasaCiclomotor = getTasaTransferencia(2026, true);
+
+  switch (slug) {
+    case 'documentacion-tramitar':
+      return [
+        {
+          question: '¿Qué documentos son obligatorios para cambiar de titular un coche en la DGT?',
+          answer: `${(guia.contenido.requisitos as string[]).join(' ')}`
+        },
+        {
+          question: '¿Cuánto cuesta la tasa de la DGT para el cambio de titularidad?',
+          answer: `La tasa ${tasaTransferencia.codigo} de cambio de titularidad es de ${formatImporte(tasaTransferencia.importe)} para turismos y motocicletas; para ciclomotores, la tasa ${tasaCiclomotor.codigo} es de ${formatImporte(tasaCiclomotor.importe)}.`
+        }
+      ];
+    case 'depreciacion-boe':
+      return [
+        {
+          question: '¿Cómo calcula Hacienda el valor mínimo de un coche usado?',
+          answer: guia.contenido.resumen
+        },
+        {
+          question: '¿Qué base imponible se declara si el precio del contrato es inferior al valor del BOE?',
+          answer: guia.contenido.reglaHacienda
+        }
+      ];
+    case 'tasas-dgt':
+      return [
+        {
+          question: `¿Cuál es el importe de la tasa ${tasaTransferencia.codigo} de la DGT para el cambio de titularidad en 2026?`,
+          answer: `El importe fijado para turismos, furgonetas y motocicletas es de ${formatImporte(tasaTransferencia.importe)}. Para ciclomotores se aplica la tasa ${tasaCiclomotor.codigo}, de ${formatImporte(tasaCiclomotor.importe)}.`
+        }
+      ];
+    case 'tramos-iedmt':
+      return [
+        {
+          question: '¿Qué reducciones y exenciones tiene el Impuesto de Matriculación (IEDMT)?',
+          answer: (guia.contenido.bonificaciones as { titulo: string; detalle: string }[])
+            .map(b => `${b.titulo}: ${b.detalle}`)
+            .join(' ')
+        },
+        {
+          question: '¿Cómo se liquida el Impuesto de Matriculación ante la Agencia Tributaria?',
+          answer: guia.contenido.resumen
+        }
+      ];
+    default:
+      return [];
+  }
 }
 
 export default async function GuiaTemaPage({
@@ -237,6 +295,8 @@ export default async function GuiaTemaPage({
           />
         </div>
       </div>
+
+      <FaqSection title={`Preguntas Frecuentes sobre ${guia.titulo}`} items={buildGuiaFaqs(slug, guia)} />
 
       <AdSlot className="mb-8" />
 

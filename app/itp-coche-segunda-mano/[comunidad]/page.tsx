@@ -17,6 +17,8 @@ import { AdSlot } from '@/components/AdSlot';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { CalculadoraTransferencia } from '@/components/CalculadoraTransferencia';
 import { VerificationNotice } from '@/components/VerificationNotice';
+import { FaqSection, type FaqItem } from '@/components/FaqSection';
+import { FaqReviewCallsCard } from '@/components/FaqReviewCallsCard';
 
 export const dynamicParams = false;
 
@@ -83,6 +85,27 @@ function formatEUR(val: number): string {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(val);
+}
+
+function buildComunidadFaqs(
+  com: ComunidadITPData,
+  tasaOrdinaria: { codigo: string; importe: number },
+  tasaCiclomotorImporte: number
+): FaqItem[] {
+  return [
+    {
+      question: `¿Qué tipo de ITP se aplica a un coche de segunda mano en ${com.nombre}?`,
+      answer: `En ${com.nombre}, el tipo del Impuesto de Transmisiones Patrimoniales (ITP) para vehículos usados es del ${formatTipo(getTipoEfectivoITP(com))} %. Se liquida sobre el valor mayor entre el precio de venta en contrato y el valor mínimo fiscal de las tablas oficiales del BOE, con los coeficientes de depreciación por antigüedad.`
+    },
+    {
+      question: `¿Qué modelo hay que presentar para pagar el ITP en ${com.nombre}?`,
+      answer: `El trámite se liquida ante ${com.organismo} mediante el ${com.modelo}.`
+    },
+    {
+      question: `¿Cuánto cuesta en total transferir un coche en ${com.nombre}?`,
+      answer: `El coste total se compone de la cuota del ITP autonómico más la tasa ${tasaOrdinaria.codigo} de la DGT para el cambio de titularidad (${formatEUR(tasaOrdinaria.importe)} para turismos y motos, o ${formatEUR(tasaCiclomotorImporte)} para ciclomotores).`
+    }
+  ];
 }
 
 export default async function ComunidadPage({
@@ -264,6 +287,13 @@ export default async function ComunidadPage({
         <h2 className="text-xl font-bold mb-3">Calcula el ITP de tu coche en {com.nombre}</h2>
         <CalculadoraTransferencia initialComunidad={com.slug} />
       </div>
+
+      <FaqSection
+        title={`Preguntas Frecuentes sobre el ITP en ${com.nombre}`}
+        items={buildComunidadFaqs(com, tasaOrdinaria, tasaCiclomotor.importe)}
+      />
+
+      <FaqReviewCallsCard />
 
       <AdSlot className="mb-8" />
 

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import sitemap from '../app/sitemap';
 import { getComunidadITP, getComunidadesList } from '../lib/itp';
 import { getIEDMTData } from '../lib/iedmt';
+import { buildFaqJsonLd } from '../components/FaqSection';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -75,4 +76,31 @@ test('Verificación de rutas estáticas, slugs, 404 y sitemap sin red', async (t
     }
   });
 
+  await t.test('FAQPage en ITP por comunidad y guías, enlace a llamadas a revisión y imagen OG', () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(process.cwd(), ...parts), 'utf-8');
+    const itpPage = read('app', 'itp-coche-segunda-mano', '[comunidad]', 'page.tsx');
+    const guiaPage = read('app', 'guia', '[tema]', 'page.tsx');
+    const faqComponent = read('components', 'FaqSection.tsx');
+    const reviewCard = read('components', 'FaqReviewCallsCard.tsx');
+    const layout = read('app', 'layout.tsx');
+
+    assert.ok(faqComponent.includes("'FAQPage'"), 'El componente FAQ debe emitir schema FAQPage');
+    assert.ok(itpPage.includes('<FaqSection'), 'Ficha ITP debe usar FaqSection');
+    assert.ok(guiaPage.includes('<FaqSection'), 'Guías deben usar FaqSection');
+
+    assert.ok(itpPage.includes('<FaqReviewCallsCard'), 'Ficha ITP debe mostrar la tarjeta de llamadas a revisión');
+    assert.ok(reviewCard.includes("'/es/llamadas-revision'"), 'La tarjeta debe enlazar a /es/llamadas-revision');
+    assert.ok(!reviewCard.includes('next/link'), 'El enlace a otra sección del dominio no usa next/link');
+
+    assert.ok(layout.includes('/brand/ododex-og.png'), 'El layout debe declarar la imagen OG');
+    assert.ok(layout.includes('summary_large_image'), 'El layout debe declarar twitter summary_large_image');
+  });
+
+  await t.test('buildFaqJsonLd genera un FAQPage con una pregunta por elemento', () => {
+    const items = [{ question: 'Pregunta', answer: 'Respuesta' }];
+    const json = buildFaqJsonLd(items);
+    assert.equal(json['@type'], 'FAQPage');
+    assert.equal(json.mainEntity.length, 1);
+    assert.equal(json.mainEntity[0].acceptedAnswer.text, 'Respuesta');
+  });
 });

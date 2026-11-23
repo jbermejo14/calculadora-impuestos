@@ -44,6 +44,9 @@ const THEME_SCRIPT = `
 `;
 
 const homeUrl = absoluteUrl('/');
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
+const ogImageUrl = absoluteUrl('/brand/ododex-og.png');
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
@@ -78,7 +81,12 @@ export const metadata: Metadata = {
     url: homeUrl,
     siteName: SITE_NAME,
     title: HOME_TITLE,
-    description: HOME_DESCRIPTION
+    description: HOME_DESCRIPTION,
+    images: [{ url: ogImageUrl, width: OG_IMAGE_WIDTH, height: OG_IMAGE_HEIGHT, alt: HOME_TITLE }]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: [ogImageUrl]
   }
 };
 
